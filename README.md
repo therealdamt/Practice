@@ -1,22 +1,21 @@
-# Practice
-Mongo Practice Core | [!] Almost Compelted [!]
+# Practice Core
+A practice core made with the Mongo database.
 
 ***
 
 ### Intorduction
 
-Hello everyone, my name is damt and today I present to you a fully custom practice core that has one depenency which is Mongo Database
+Hello! My name is damt, today I present to you a fully custom practice core that has only one depenency which is access to a Mongo database.
 
 ### Infromation
 
-* Version | 1.7-1.8
+* Supported Version(s) 1.7.X - 1.8.X
 * Configurable
-* Almost Completed
 * Optimized
 
 ### API
 
-* The API is still not released, once the project is completed, an API will be added along with a wiki.
+* None currently, will be implemented soon.
 
 ### Configuration
 
@@ -56,6 +55,6 @@ scoreboard:
 ### Contact
 If you'd like to contact me, you can use any of the 3 platforms below:
 
-* Discord - damt#0866
-* [Telegram](https://t.me/therealdamt)
-* [Webiste](https://damt.xyz)
+* My Discord - damt#0866
+* [My Telegram](https://t.me/therealdamt)
+* [My Webiste](https://damt.xyz)
