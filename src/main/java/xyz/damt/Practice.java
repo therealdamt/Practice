@@ -3,6 +3,7 @@ package xyz.damt;
 import lombok.Getter;
 import me.vaperion.blade.Blade;
 import me.vaperion.blade.command.bindings.impl.BukkitBindings;
+import me.vaperion.blade.command.bindings.impl.DefaultBindings;
 import me.vaperion.blade.command.container.ContainerCreator;
 import me.vaperion.blade.command.container.impl.BukkitCommandContainer;
 import org.bukkit.Material;
@@ -86,11 +87,10 @@ public class Practice extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new MatchListener(), this);
         this.getServer().getPluginManager().registerEvents(new StatsListener(), this);
 
-        Blade.of().binding(new BukkitBindings()).containerCreator(BukkitCommandContainer.CREATOR)
+        Blade.of().binding(new BukkitBindings()).binding(new DefaultBindings()).containerCreator(BukkitCommandContainer.CREATOR)
                 .bind(Kit.class, new KitCommandProvider(this))
                 .bind(Arena.class, new ArenaCommandProvider(this))
                 .bind(Queue.class, new QueueCommandProvider(this))
-                .bind(UUID.class, new UUIDCommandProvider())
                 .bind(Material.class, new MaterialCommandProvider())
                 .fallbackPrefix("practice").tabCompleter(bladeCommandService -> {
         }).build().register(new ViewCommand()).register(new RankedCommand()).register(new UnrankedCommand())

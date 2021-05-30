@@ -9,6 +9,10 @@ import org.jetbrains.annotations.Nullable;
 import xyz.damt.Practice;
 import xyz.damt.kit.Kit;
 import xyz.damt.queue.Queue;
+import xyz.damt.util.CC;
+
+import java.util.Collections;
+import java.util.List;
 
 public class QueueCommandProvider implements BladeProvider<Queue> {
 
@@ -26,5 +30,11 @@ public class QueueCommandProvider implements BladeProvider<Queue> {
         if (kit == null || s == null) return null;
 
         return kit.getQueue();
+    }
+
+    @NotNull
+    @Override
+    public List<String> suggest(@NotNull BladeContext context, @NotNull String input) throws BladeExitMessage {
+        return Collections.singletonList(CC.translate("&cThe queue " + input + " does not exist!"));
     }
 }

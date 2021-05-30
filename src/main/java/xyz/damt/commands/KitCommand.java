@@ -60,6 +60,15 @@ public class KitCommand {
         player.sendMessage(CC.translate("&7You have delete a kit with the name &b" + kit.getName()));
     }
 
+    @Command(value = {"kit edit", "kits edit"}, quoted = false, async = true, description = "Kit Edit Command")
+    @Permission(value = "practice.kit", message = "You are not allowed to execute this command!")
+    public void kitEditCommand(@Sender Player player, @Name("kit") Kit kit) {
+        kit.setArmorContents(player.getInventory().getArmorContents());
+        kit.setContents(player.getInventory().getContents());
+
+        player.sendMessage(CC.translate("&7You have edited the kit &b" + kit.getName()));
+    }
+
     @Command(value = {"kit seticon", "kits seticon"}, quoted = false, async = true, description = "Kit Set Icon Command")
     @Permission(value = "practice.kit", message = "You are not allowed to execute this command!")
     public void kitSetIcon(@Sender Player player, Kit kit, @Name("icon") Material material) {
