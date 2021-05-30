@@ -28,11 +28,22 @@ public class KitCommand {
             "&7&m-------&b&lKit Help Commands&7&m-------"
     );
 
+    /**
+     * Main Kit Command
+     * @param player sender
+     */
+
     @Command(value = {"kit", "kits"}, quoted = false, async = true, description = "Kit Command")
     @Permission(value = "practice.kit", message = "You are not allowed to execute this command!")
     public void kitCommand(@Sender Player player) {
         helpMessage.forEach(s -> player.sendMessage(CC.translate(s)));
     }
+
+    /**
+     * Kit Create Command
+     * @param player sender
+     * @param name arena name
+     */
 
     @Command(value = {"kit create", "kits create"}, quoted = false, async = true, description = "Kit Create Command")
     @Permission(value = "practice.kit", message = "You are not allowed to execute this command!")
@@ -53,12 +64,24 @@ public class KitCommand {
         player.sendMessage(CC.translate("&7You have created a kit with the name &b" + newKit.getName()));
     }
 
+    /**
+     * Kit Delete Command
+     * @param player sender
+     * @param kit to delete
+     */
+
     @Command(value = {"kit delete", "kits delete"}, quoted = false, async = true, description = "Kit Delete Command")
     @Permission(value = "practice.kit", message = "You are not allowed to execute this command!")
     public void kitDeleteCommand(@Sender Player player, @Name("kit") Kit kit) {
-        kit.remove();
+        kit.remove(true);
         player.sendMessage(CC.translate("&7You have delete a kit with the name &b" + kit.getName()));
     }
+
+    /**
+     * Kit Edit Command
+     * @param player sender
+     * @param kit to edit
+     */
 
     @Command(value = {"kit edit", "kits edit"}, quoted = false, async = true, description = "Kit Edit Command")
     @Permission(value = "practice.kit", message = "You are not allowed to execute this command!")
@@ -69,6 +92,13 @@ public class KitCommand {
         player.sendMessage(CC.translate("&7You have edited the kit &b" + kit.getName()));
     }
 
+    /**
+     * Kit Set Icon Command
+     * @param player sender
+     * @param kit to set icon for
+     * @param material icon
+     */
+
     @Command(value = {"kit seticon", "kits seticon"}, quoted = false, async = true, description = "Kit Set Icon Command")
     @Permission(value = "practice.kit", message = "You are not allowed to execute this command!")
     public void kitSetIcon(@Sender Player player, Kit kit, @Name("icon") Material material) {
@@ -76,12 +106,25 @@ public class KitCommand {
         player.sendMessage(CC.translate("&7You have set the icon of the kit &b" + kit.getName() + "&7 to &b" + material.toString()));
     }
 
+    /**
+     * Kit Set Color Command
+     * @param player sender
+     * @param kit to set the color for
+     * @param color string color
+     */
+
     @Command(value = {"kit setcolor", "kits setcolor"}, quoted = false, async = true, description = "Kit Set Color Command")
     @Permission(value = "practice.kit", message = "You are not allowed to execute this command!")
     public void kitSetColor(@Sender Player player, Kit kit, @Name("color") String color) {
         kit.setColor(color);
         player.sendMessage(CC.translate("&7You have set the color of the kit &b" + kit.getName() + "&7 to the color " + color + "color&7!"));
     }
+
+    /**
+     * Kit Build Command
+     * @param player sender
+     * @param kit to set builder
+     */
 
     @Command(value = {"kit build", "kits build"}, quoted = false, async = true, description = "Kit Build Command")
     @Permission(value = "practice.kit", message = "You are not allowed to execute this command!")
@@ -99,6 +142,11 @@ public class KitCommand {
                 break;
         }
     }
+
+    /**
+     * Kit List Command
+     * @param player sender
+     */
 
     @Command(value = {"kit list", "kits list"}, quoted = false, async = true, description = "Kit List Command")
     @Permission(value = "practice.kit", message = "You are not allowed to execute this command!")

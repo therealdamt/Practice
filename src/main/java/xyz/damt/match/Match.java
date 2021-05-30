@@ -38,6 +38,8 @@ public class Match {
         this.isElo = isElo;
         this.kit = kit;
 
+        this.countdownTime = 5;
+
         this.spectators = new ArrayList<>();
         this.start();
     }
@@ -67,22 +69,16 @@ public class Match {
                 new MatchEndEvent(this, playerOne, playerTwo) : new MatchEndEvent(this, playerTwo, playerOne);
         Bukkit.getPluginManager().callEvent(matchEndEvent);
 
-        Profile profilePlayerOne = Practice.getInstance().getProfileHandler().getProfile(playerOne.getUniqueId());
-        Profile profilePlayerTwo = Practice.getInstance().getProfileHandler().getProfile(playerTwo.getUniqueId());
+        playerOne.setGameMode(GameMode.CREATIVE);
+        playerTwo.setGameMode(GameMode.CREATIVE);
 
-        profilePlayerOne.setLastInventoryContents(playerOne.getInventory().getContents());
-        profilePlayerOne.setLastArmorContents(playerOne.getInventory().getArmorContents());
+        playerOne.spigot().respawn();
+        playerTwo.spigot().respawn();
 
-        profilePlayerTwo.setLastInventoryContents(playerTwo.getInventory().getContents());
-        profilePlayerTwo.setLastArmorContents(playerTwo.getInventory().getArmorContents());
+        Practice.getInstance().getMatchHandler().getMatchHashMap().remove(playerOne.getUniqueId());
+        Practice.getInstance().getMatchHandler().getMatchHashMap().remove(playerTwo.getUniqueId());
 
-        if (playerOne != null) playerOne.setGameMode(GameMode.CREATIVE);
-        if (playerTwo != null) playerTwo.setGameMode(GameMode.CREATIVE);
-
-        Bukkit.getScheduler().runTaskLaterAsynchronously(Practice.getInstance(), () -> {
-            spectators.clear();
-            arena.rollback();
-
+        Bukkit.getScheduler().runTaskLater(Practice.getInstance(), () -> {
             playersToList().forEach(player -> {
                 if (player != null) {
                     player.teleport(Practice.getInstance().getServerHandler().getSpawnLocation());
@@ -90,8 +86,9 @@ public class Match {
                 }
             });
 
-            Practice.getInstance().getMatchHandler().getMatchHashMap().remove(playerOne.getUniqueId());
-            Practice.getInstance().getMatchHandler().getMatchHashMap().remove(playerTwo.getUniqueId());
+            spectators.clear();
+            arena.rollback();
+            arena.setBusy(false);
         }, time * 20L);
     }
 

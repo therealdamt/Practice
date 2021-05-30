@@ -10,14 +10,18 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import xyz.damt.Practice;
+import xyz.damt.util.CC;
 
 import java.util.Map;
 
-@Getter @Setter
+@Getter
+@Setter
 public abstract class Menu {
 
     public abstract Map<Integer, ItemStack> getMap(Player player);
-    public void click(Player player, InventoryClickEvent event) {}
+
+    public void click(Player player, InventoryClickEvent event) {
+    }
 
     private final Player player;
     private final Inventory inventory;
@@ -39,7 +43,7 @@ public abstract class Menu {
                 getMap(player).put(i, fillerBlock);
 
         getMap(player).keySet().forEach(integer ->
-            inventory.setItem(integer, getMap(player).get(integer)));
+                inventory.setItem(integer, getMap(player).get(integer)));
     }
 
     public void updateMenu() {
@@ -55,11 +59,12 @@ public abstract class Menu {
 
     public int getNumber(int number, int multiple) {
         int x = number;
-        int result = 0;
 
-        for (int i = x; i < multiple; i++) {
-            if (i % multiple == 0) {
-                result = i;
+        while (true) {
+            double check = x / multiple;
+            if (CC.isDouble(check)) {
+                x += 1;
+            } else {
                 break;
             }
         }

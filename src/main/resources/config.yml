@@ -1,3 +1,12 @@
+other:
+  join-message:
+    - "&7&m---------------------------------"
+    - "&7Welcome to &bdamt's practice core!"
+    - " "
+    - "&b&lDiscord&7 | damt#0886"
+    - "&b&lTelegram&7 | @therealdamt"
+    - "&7&m---------------------------------"
+
 settings:
   use-placeholder: true
   required-wins: 10

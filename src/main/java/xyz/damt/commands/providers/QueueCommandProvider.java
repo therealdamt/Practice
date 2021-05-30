@@ -9,10 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import xyz.damt.Practice;
 import xyz.damt.kit.Kit;
 import xyz.damt.queue.Queue;
-import xyz.damt.util.CC;
-
-import java.util.Collections;
-import java.util.List;
 
 public class QueueCommandProvider implements BladeProvider<Queue> {
 
@@ -27,14 +23,10 @@ public class QueueCommandProvider implements BladeProvider<Queue> {
     public Queue provide(@NotNull BladeContext bladeContext, @NotNull BladeParameter bladeParameter, @Nullable String s) throws BladeExitMessage {
         Kit kit = practice.getKitHandler().getKit(s);
 
-        if (kit == null || s == null) return null;
+        if (kit == null || s == null || kit.getQueue() == null)
+            throw new BladeExitMessage("The queue " + s + " does not exist!");
 
         return kit.getQueue();
     }
 
-    @NotNull
-    @Override
-    public List<String> suggest(@NotNull BladeContext context, @NotNull String input) throws BladeExitMessage {
-        return Collections.singletonList(CC.translate("&cThe queue " + input + " does not exist!"));
-    }
 }

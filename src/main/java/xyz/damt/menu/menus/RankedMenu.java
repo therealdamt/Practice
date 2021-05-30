@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RankedMenu extends Menu {
 
     public RankedMenu(Player player) {
-        super(player, 0, CC.translate("&b&lRanked Queue"));
+        super(player, 9, CC.translate("&b&lRanked Queue"));
 
         this.setSize(this.getNumber(Practice.getInstance().getKitHandler().getRankedKits().size(), 9));
     }

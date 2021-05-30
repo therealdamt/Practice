@@ -85,10 +85,22 @@ public class Arena {
         blocksBuilt.clear();
     }
 
+    public void remove(boolean async) {
+
+        if (async) {
+            Bukkit.getScheduler().runTaskAsynchronously(Practice.getInstance(), () -> remove(false));
+            return;
+        }
+
+        this.rollback();
+        mongoHandler.getArena().deleteOne(new Document("_id", name));
+        Practice.getInstance().getArenaHandler().getArenaHashMap().remove(name);
+    }
+
     public Document toBson() {
         return new Document("_id", name)
                 .append("pos1", LocationUtil.locationToString(positionOne))
-                .append("pos2", LocationUtil.locationToString(positionOne))
+                .append("pos2", LocationUtil.locationToString(positionTwo))
                 .append("center", LocationUtil.locationToString(center))
                 .append("corner1", LocationUtil.locationToString(cornerOne))
                 .append("corner2", LocationUtil.locationToString(cornerTwo))

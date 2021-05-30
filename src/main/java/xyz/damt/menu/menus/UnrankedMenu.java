@@ -18,7 +18,7 @@ public class UnrankedMenu extends Menu {
         super(player, 9, CC.translate("&c&lUnranked Queue Menu"));
 
         int size = Practice.getInstance().getKitHandler().getUnrankedKits().size();
-        this.setSize(this.getNumber(size == 0 ? size + 1 : size, 9));
+        this.setSize(this.getNumber(size, 9));
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -53,6 +54,10 @@ public class CC {
 
     public List<UUID> listStringToUUID(List<String> strings) {
         return strings.stream().map(UUID::fromString).collect(Collectors.toList());
+    }
+
+    public boolean isDouble(double number) {
+        return !((number % 1) == 0);
     }
 
 }

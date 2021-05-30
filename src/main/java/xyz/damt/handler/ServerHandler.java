@@ -16,6 +16,7 @@ public class ServerHandler {
 
     public ServerHandler(Practice practice) {
         this.practice = practice;
+        this.spawnLocation = practice.getServer().getWorld("world").getSpawnLocation();
     }
 
     public void giveSpawnItems(Player player) {

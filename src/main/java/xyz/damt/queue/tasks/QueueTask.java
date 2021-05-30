@@ -13,6 +13,6 @@ public class QueueTask extends BukkitRunnable {
 
     @Override
     public void run() {
-
+        queueHandler.getQueues().forEach(queue -> queue.move());
     }
 }

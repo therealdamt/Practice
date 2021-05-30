@@ -19,6 +19,7 @@ import xyz.damt.handler.MongoHandler;
 import xyz.damt.handler.ServerHandler;
 import xyz.damt.kit.Kit;
 import xyz.damt.kit.KitHandler;
+import xyz.damt.listener.ServerListener;
 import xyz.damt.listener.StatsListener;
 import xyz.damt.match.MatchHandler;
 import xyz.damt.match.listener.MatchListener;
@@ -30,6 +31,8 @@ import xyz.damt.queue.Queue;
 import xyz.damt.queue.QueueHandler;
 import xyz.damt.queue.listener.QueueListener;
 import xyz.damt.scoreboard.Adapter;
+import xyz.damt.tasks.MongoSaveTask;
+import xyz.damt.util.CC;
 import xyz.damt.util.assemble.Assemble;
 import xyz.damt.util.assemble.AssembleStyle;
 
@@ -78,6 +81,7 @@ public class Practice extends JavaPlugin {
 
         this.registerPlugin();
         new Assemble(this, new Adapter(this), AssembleStyle.KOHI, 10);
+        new MongoSaveTask(this).runTaskTimerAsynchronously(this, 500 * 20L, 500 * 20L);
     }
 
     private void registerPlugin() {
@@ -86,6 +90,7 @@ public class Practice extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new QueueListener(), this);
         this.getServer().getPluginManager().registerEvents(new MatchListener(), this);
         this.getServer().getPluginManager().registerEvents(new StatsListener(), this);
+        this.getServer().getPluginManager().registerEvents(new ServerListener(), this);
 
         Blade.of().binding(new BukkitBindings()).binding(new DefaultBindings()).containerCreator(BukkitCommandContainer.CREATOR)
                 .bind(Kit.class, new KitCommandProvider(this))
@@ -94,12 +99,11 @@ public class Practice extends JavaPlugin {
                 .bind(Material.class, new MaterialCommandProvider())
                 .fallbackPrefix("practice").tabCompleter(bladeCommandService -> {
         }).build().register(new ViewCommand()).register(new RankedCommand()).register(new UnrankedCommand())
-        .register(new LeaveQueueCommand()).register(new KitCommand());
+        .register(new LeaveQueueCommand()).register(new KitCommand()).register(new ArenaCommand());
 
         if (configHandler.getSettingsHandler().USE_PLACEHOLDER) {
             new PracticePlaceHolderHook(this).register();
         }
-
     }
 
     @Override

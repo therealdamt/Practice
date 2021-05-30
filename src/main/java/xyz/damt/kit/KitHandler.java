@@ -8,6 +8,7 @@ import xyz.damt.Practice;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -36,12 +37,12 @@ public class KitHandler {
         return kitHashMap.get(name.toLowerCase());
     }
 
-    public Set<Kit> getUnrankedKits() {
-        return getKits().stream().filter(kit -> !kit.isElo()).collect(Collectors.toSet());
+    public List<Kit> getUnrankedKits() {
+        return getKits().stream().filter(kit -> !kit.isElo()).collect(Collectors.toList());
     }
 
-    public Set<Kit> getRankedKits() {
-        return getKits().stream().filter(kit -> kit.isElo()).collect(Collectors.toSet());
+    public List<Kit> getRankedKits() {
+        return getKits().stream().filter(kit -> kit.isElo()).collect(Collectors.toList());
     }
 
     public Kit getKit(ItemStack stack, boolean elo) {

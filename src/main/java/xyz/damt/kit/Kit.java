@@ -79,8 +79,15 @@ public class Kit {
         });
     }
 
-    public void remove() {
+    public void remove(boolean async) {
+
+        if (async) {
+            Bukkit.getScheduler().runTaskAsynchronously(Practice.getInstance(), () -> remove(false));
+            return;
+        }
+
         Practice.getInstance().getKitHandler().getKitHashMap().remove(name);
+        Practice.getInstance().getArenaHandler().getArenasOfKit(this).forEach(arena -> arena.getKits().remove(this));
         mongoHandler.getKits().deleteOne(new Document("_id", name));
     }
 

@@ -47,8 +47,8 @@ public class Queue {
             int difference = oneProfile.getElo() - twoProfile.getElo();
 
             if (difference <= 250) {
+                playersInQueue.remove(i);
                 playersInQueue.remove(0);
-                playersInQueue.remove(1);
 
                 if (arena == null) {
                     one.sendMessage(CC.translate("&cThere is no empty arena for you to join!"));
@@ -58,14 +58,16 @@ public class Queue {
 
                 new Match(one, two, kit, arena, true);
             } else {
+                if (i > playersInQueue.size()) return;
+
                 i++;
                 two = Bukkit.getPlayer(playersInQueue.get(i));
             }
             return;
         }
 
-        playersInQueue.remove(0);
         playersInQueue.remove(1);
+        playersInQueue.remove(0);
 
         if (arena == null) {
             one.sendMessage(CC.translate("&cThere is no empty arena for you to join!"));
