@@ -8,6 +8,7 @@ import xyz.damt.queue.tasks.QueueTask;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class QueueHandler {
 
@@ -29,8 +30,8 @@ public class QueueHandler {
         return kitQueueHashMap.get(kit);
     }
 
-    public Queue getQueueOfPlayer(Player player) {
-        return getQueues().stream().filter(queue -> queue.getPlayersInQueue().contains(player)).findFirst().orElse(null);
+    public Queue getQueue(UUID uuid) {
+        return getQueues().stream().filter(queue -> queue.getPlayersInQueue().contains(uuid)).findFirst().orElse(null);
     }
 
     public int getPlayersInQueueSize() {

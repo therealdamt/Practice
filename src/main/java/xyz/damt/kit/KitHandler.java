@@ -2,11 +2,14 @@ package xyz.damt.kit;
 
 import lombok.Getter;
 import org.bson.Document;
+import org.bukkit.inventory.ItemStack;
 import xyz.damt.Practice;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class KitHandler {
 
@@ -30,6 +33,18 @@ public class KitHandler {
 
     public Kit getKit(String name) {
         return kitHashMap.get(name.toLowerCase());
+    }
+
+    public Set<Kit> getUnrankedKits() {
+        return getKits().stream().filter(kit -> !kit.isElo()).collect(Collectors.toSet());
+    }
+
+    public Set<Kit> getRankedKits() {
+        return getKits().stream().filter(kit -> kit.isElo()).collect(Collectors.toSet());
+    }
+
+    public Kit getKit(ItemStack stack, boolean elo) {
+        return getKits().stream().filter(kit -> kit.getIcon().equals(stack) && kit.isElo() == elo).findFirst().orElse(null);
     }
 
 }

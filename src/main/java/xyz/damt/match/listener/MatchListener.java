@@ -1,26 +1,22 @@
 package xyz.damt.match.listener;
 
-import com.sun.deploy.uitoolkit.impl.text.TextWindow;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import xyz.damt.Practice;
 import xyz.damt.events.MatchEndEvent;
-import xyz.damt.kit.KitType;
 import xyz.damt.match.Match;
 import xyz.damt.util.CC;
-import xyz.damt.util.framework.listener.ListenerAdapter;
 
-import java.util.List;
+public class MatchListener implements Listener {
 
-public class MatchListener extends ListenerAdapter {
+    private final Practice practice = Practice.getInstance();
 
     @EventHandler
     public void onPlayerMoveEvent(PlayerMoveEvent e) {
@@ -70,7 +66,7 @@ public class MatchListener extends ListenerAdapter {
         match.stop(winner.getUniqueId(), 3);
     }
 
-    @EventHandler
+    /* @EventHandler
     public void onBlockPlaceEvent(BlockPlaceEvent e) {
         Player player = e.getPlayer();
         Match match = practice.getMatchHandler().getMatch(player.getUniqueId());
@@ -79,9 +75,9 @@ public class MatchListener extends ListenerAdapter {
 
         e.setCancelled(true);
         player.sendMessage(CC.translate("&cYou may not build blocks whilst using a non-build kit!"));
-    }
+    } */
 
-    @EventHandler
+   /* @EventHandler
     public void onBlockBreakEvent(BlockBreakEvent e) {
         Player player = e.getPlayer();
         Match match = practice.getMatchHandler().getMatch(player.getUniqueId());
@@ -90,7 +86,7 @@ public class MatchListener extends ListenerAdapter {
 
         e.setCancelled(true);
         player.sendMessage(CC.translate("&cYou may not break blocks whilst using a non-build kit!"));
-    }
+    } */
 
     @EventHandler
     public void onMatchEndEvent(MatchEndEvent e) {

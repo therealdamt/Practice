@@ -1,3 +1,7 @@
+settings:
+  use-placeholder: true
+  required-wins: 10
+
 mongo:
   host: "localhost"
   port: 27017

@@ -37,7 +37,7 @@ public class Adapter implements AssembleAdapter {
             .replace("{queue}", String.valueOf(practice.getQueueHandler().getPlayersInQueueSize())
             .replace("{kills}", String.valueOf(profile.getKills())).replace("{deaths}", String.valueOf(profile.getDeaths()))
             .replace("{played}", String.valueOf(profile.getGamesPlayed())))
-            .replace("{ping}", String.valueOf(profile.getPing()))).collect(Collectors.toList());
+            .replace("{ping}", String.valueOf(profile.getPing())).replace("{player}", player.getName())).collect(Collectors.toList());
         }
 
         Player opponent = match.getOpponent(player);
@@ -46,7 +46,8 @@ public class Adapter implements AssembleAdapter {
         return practice.getConfigHandler().getScoreboardHandler().IN_MATCH_SCOREBOARD.stream().map(string ->
                 string.replace("{opponent}", opponent.getName()).replace("{opponent_ping}", String.valueOf(opponentProfile.getPing()))
         .replace("{player}", player.getName()).replace("{player_ping}", String.valueOf(profile.getPing()))
-        .replace("{opponent_elo}", String.valueOf(opponentProfile.getElo())).replace("{player_elo}", String.valueOf(profile.getElo())))
+        .replace("{opponent_elo}", String.valueOf(opponentProfile.getElo())).replace("{player_elo}", String.valueOf(profile.getElo()))
+        .replace("{kit}", match.getKit().getName()))
                 .collect(Collectors.toList());
     }
 }
