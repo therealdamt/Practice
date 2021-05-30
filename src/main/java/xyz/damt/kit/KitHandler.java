@@ -2,6 +2,7 @@ package xyz.damt.kit;
 
 import lombok.Getter;
 import org.bson.Document;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import xyz.damt.Practice;
 
@@ -22,7 +23,7 @@ public class KitHandler {
 
     public void load() {
         practice.getServer().getScheduler().runTaskAsynchronously(practice, () -> {
-            practice.getMongoHandler().getProfiles().find().forEach((Consumer<? super Document>) document ->
+            practice.getMongoHandler().getKits().find().forEach((Consumer<? super Document>) document ->
                 new Kit(document.getString("_id")));
         });
     }
@@ -44,7 +45,7 @@ public class KitHandler {
     }
 
     public Kit getKit(ItemStack stack, boolean elo) {
-        return getKits().stream().filter(kit -> kit.getIcon().equals(stack) && kit.isElo() == elo).findFirst().orElse(null);
+        return getKits().stream().filter(kit -> kit.getItem().equals(stack) && kit.isElo() == elo).findFirst().orElse(null);
     }
 
 }

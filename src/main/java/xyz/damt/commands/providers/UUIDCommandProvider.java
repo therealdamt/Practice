@@ -12,12 +12,6 @@ import java.util.UUID;
 
 public class UUIDCommandProvider implements BladeProvider<UUID> {
 
-    private final Practice practice;
-
-    public UUIDCommandProvider(Practice practice) {
-        this.practice = practice;
-    }
-
     @Nullable
     @Override
     public UUID provide(@NotNull BladeContext bladeContext, @NotNull BladeParameter bladeParameter, @Nullable String s) throws BladeExitMessage {

@@ -1,15 +1,13 @@
 package xyz.damt.events;
 
-import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import xyz.damt.match.Match;
 
-@Getter
 public class MatchStartEvent extends Event {
 
-    private final HandlerList handlerList = new HandlerList();
+    private static final HandlerList handlerList = new HandlerList();
 
     private final Player playerOne;
     private final Player playerTwo;
@@ -19,6 +17,22 @@ public class MatchStartEvent extends Event {
         this.match = match;
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
+    }
+
+    public Player getPlayerOne() {
+        return playerOne;
+    }
+
+    public Player getPlayerTwo() {
+        return playerTwo;
+    }
+
+    public Match getMatch() {
+        return match;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlerList;
     }
 
     @Override

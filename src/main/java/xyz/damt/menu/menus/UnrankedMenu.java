@@ -15,12 +15,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UnrankedMenu extends Menu {
 
     public UnrankedMenu(Player player) {
-        super(player, 0, CC.translate("&c&lUnranked Queue Menu"));
+        super(player, 9, CC.translate("&c&lUnranked Queue Menu"));
 
-        int number = Practice.getInstance().getKitHandler().getUnrankedKits().size();
-        int result = number % 9 == 0 ? number : number + (9 - (number % 9));
-
-        this.setSize(result);
+        int size = Practice.getInstance().getKitHandler().getUnrankedKits().size();
+        this.setSize(this.getNumber(size == 0 ? size + 1 : size, 9));
     }
 
     @Override
@@ -33,7 +31,7 @@ public class UnrankedMenu extends Menu {
         Kit kit = Practice.getInstance().getKitHandler().getKit(stack, false);
         Queue queue = Practice.getInstance().getQueueHandler().getQueue(player.getUniqueId());
 
-        if (kit == null) return;
+        if (kit == null) System.out.println("null");;
 
         if (queue != null) {
             player.sendMessage(CC.translate("&cPlease leave your current queue before entering a new one!"));
@@ -42,6 +40,8 @@ public class UnrankedMenu extends Menu {
 
         kit.getQueue().add(player);
         player.sendMessage(CC.translate("&7You have entered &b" + kit.getName() + "&7's queue!"));
+
+        player.closeInventory();
     }
 
     @Override

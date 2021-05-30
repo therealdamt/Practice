@@ -1,15 +1,13 @@
 package xyz.damt.events;
 
-import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import xyz.damt.match.Match;
 
-@Getter
 public class MatchEndEvent extends Event {
 
-    private final HandlerList handlerList = new HandlerList();
+    private static final HandlerList handlerList = new HandlerList();
 
     private final Player winner;
     private final Player loser;
@@ -19,6 +17,22 @@ public class MatchEndEvent extends Event {
         this.winner = winner;
         this.loser = loser;
         this.match = match;
+    }
+
+    public Player getWinner() {
+        return winner;
+    }
+
+    public Player getLoser() {
+        return loser;
+    }
+
+    public Match getMatch() {
+        return match;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlerList;
     }
 
     @Override

@@ -4,6 +4,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import xyz.damt.Practice;
 
 public class MenuListener implements Listener {
@@ -26,8 +28,30 @@ public class MenuListener implements Listener {
 
         if (menu == null || menu.getInventory() == null) return;
 
-        if (e.getClickedInventory().equals(menu.getInventory()))
-            menu.click(player, e);
-     }
+        menu.click(player, e);
+    }
+
+    @EventHandler
+    public void onInventoryCloseEvent(InventoryCloseEvent e) {
+        if (!(e.getPlayer() instanceof Player)) return;
+        if (e.getInventory() == null) return;
+
+        Player player = (Player) e.getPlayer();
+        Menu menu = menuHandler.getMenu(player.getUniqueId());
+
+        if (menu == null) return;
+
+        menuHandler.getMenuHashMap().remove(player.getUniqueId());
+    }
+
+    @EventHandler
+    public void onPlayerQuitEvent(PlayerQuitEvent e) {
+        Player player = e.getPlayer();
+        Menu menu = menuHandler.getMenu(player.getUniqueId());
+
+        if (menu == null) return;
+
+        menuHandler.getMenuHashMap().remove(player.getUniqueId());
+    }
 
 }

@@ -5,27 +5,27 @@ import me.vaperion.blade.Blade;
 import me.vaperion.blade.command.bindings.impl.BukkitBindings;
 import me.vaperion.blade.command.container.ContainerCreator;
 import me.vaperion.blade.command.container.impl.BukkitCommandContainer;
+import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.damt.api.PracticeAPI;
 import xyz.damt.arena.Arena;
 import xyz.damt.arena.ArenaHandler;
 import xyz.damt.arena.ArenaListener;
-import xyz.damt.commands.RankedCommand;
-import xyz.damt.commands.UnrankedCommand;
-import xyz.damt.commands.ViewCommand;
-import xyz.damt.commands.providers.ArenaCommandProvider;
-import xyz.damt.commands.providers.KitCommandProvider;
-import xyz.damt.commands.providers.UUIDCommandProvider;
+import xyz.damt.commands.*;
+import xyz.damt.commands.providers.*;
 import xyz.damt.config.ConfigHandler;
 import xyz.damt.handler.MongoHandler;
 import xyz.damt.handler.ServerHandler;
 import xyz.damt.kit.Kit;
 import xyz.damt.kit.KitHandler;
+import xyz.damt.listener.StatsListener;
 import xyz.damt.match.MatchHandler;
+import xyz.damt.match.listener.MatchListener;
 import xyz.damt.menu.MenuHandler;
 import xyz.damt.placeholder.PracticePlaceHolderHook;
 import xyz.damt.profile.ProfileHandler;
 import xyz.damt.profile.ProfileListener;
+import xyz.damt.queue.Queue;
 import xyz.damt.queue.QueueHandler;
 import xyz.damt.queue.listener.QueueListener;
 import xyz.damt.scoreboard.Adapter;
@@ -79,26 +79,28 @@ public class Practice extends JavaPlugin {
         new Assemble(this, new Adapter(this), AssembleStyle.KOHI, 10);
     }
 
-    public void registerPlugin() {
+    private void registerPlugin() {
         this.getServer().getPluginManager().registerEvents(new ProfileListener(), this);
         this.getServer().getPluginManager().registerEvents(new ArenaListener(), this);
         this.getServer().getPluginManager().registerEvents(new QueueListener(), this);
-        /*this.getServer().getPluginManager().registerEvents(new MatchListener(), this);
-        this.getServer().getPluginManager().registerEvents(new StatsListener(), this); */
+        this.getServer().getPluginManager().registerEvents(new MatchListener(), this);
+        this.getServer().getPluginManager().registerEvents(new StatsListener(), this);
 
         Blade.of().binding(new BukkitBindings()).containerCreator(BukkitCommandContainer.CREATOR)
                 .bind(Kit.class, new KitCommandProvider(this))
                 .bind(Arena.class, new ArenaCommandProvider(this))
-                .bind(UUID.class, new UUIDCommandProvider(this))
+                .bind(Queue.class, new QueueCommandProvider(this))
+                .bind(UUID.class, new UUIDCommandProvider())
+                .bind(Material.class, new MaterialCommandProvider())
                 .fallbackPrefix("practice").tabCompleter(bladeCommandService -> {
-        }).build().register(new ViewCommand()).register(new RankedCommand()).register(new UnrankedCommand());
+        }).build().register(new ViewCommand()).register(new RankedCommand()).register(new UnrankedCommand())
+        .register(new LeaveQueueCommand()).register(new KitCommand());
 
         if (configHandler.getSettingsHandler().USE_PLACEHOLDER) {
             new PracticePlaceHolderHook(this).register();
         }
 
     }
-
 
     @Override
     public void onDisable() {

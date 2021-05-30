@@ -4,9 +4,11 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import xyz.damt.Practice;
+import xyz.damt.arena.Arena;
 import xyz.damt.kit.Kit;
 import xyz.damt.match.Match;
 import xyz.damt.profile.Profile;
+import xyz.damt.util.CC;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +40,23 @@ public class Queue {
         Profile oneProfile = Practice.getInstance().getProfileHandler().getProfile(one.getUniqueId());
         Profile twoProfile = Practice.getInstance().getProfileHandler().getProfile(two.getUniqueId());
 
+        Arena arena = Practice.getInstance().getArenaHandler().getArenaOfKit(kit);
+
+
         if (queueType.equals(QueueType.ELO)) {
             int difference = oneProfile.getElo() - twoProfile.getElo();
 
             if (difference <= 250) {
-                new Match(one, two, kit, Practice.getInstance().getArenaHandler().getArenaOfKit(kit), true);
+                playersInQueue.remove(0);
+                playersInQueue.remove(1);
+
+                if (arena == null) {
+                    one.sendMessage(CC.translate("&cThere is no empty arena for you to join!"));
+                    two.sendMessage(CC.translate("&cThere is no empty arena for you to join!"));
+                    return;
+                }
+
+                new Match(one, two, kit, arena, true);
             } else {
                 i++;
                 two = Bukkit.getPlayer(playersInQueue.get(i));
@@ -53,7 +67,13 @@ public class Queue {
         playersInQueue.remove(0);
         playersInQueue.remove(1);
 
-        new Match(one, two, kit, Practice.getInstance().getArenaHandler().getArenaOfKit(kit), false);
+        if (arena == null) {
+            one.sendMessage(CC.translate("&cThere is no empty arena for you to join!"));
+            two.sendMessage(CC.translate("&cThere is no empty arena for you to join!"));
+            return;
+        }
+
+        new Match(one, two, kit, arena, false);
     }
 
     public void add(Player player) {

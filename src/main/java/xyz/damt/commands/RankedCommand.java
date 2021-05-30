@@ -4,6 +4,7 @@ import me.vaperion.blade.command.annotation.Command;
 import me.vaperion.blade.command.annotation.Sender;
 import org.bukkit.entity.Player;
 import xyz.damt.Practice;
+import xyz.damt.kit.Kit;
 import xyz.damt.menu.menus.RankedMenu;
 import xyz.damt.profile.Profile;
 import xyz.damt.util.CC;

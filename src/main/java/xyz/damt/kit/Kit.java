@@ -16,7 +16,6 @@ import xyz.damt.util.ItemBuilder;
 import xyz.damt.util.Serializer;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 @Getter
 @Setter
@@ -24,21 +23,18 @@ public class Kit {
 
     private String name;
 
-    private ItemStack[] contents, armorContents;
-    private KitType kitType;
+    private ItemStack[] contents, armorContents = new ItemStack[]{};
+    private KitType kitType = KitType.NO_BUILD;
     private boolean elo;
 
-    private Material icon;
-    private String color;
+    private Material icon = Material.GOLD_SWORD;
+    private String color = "&b&l";
 
     private final Queue queue;
     private final MongoHandler mongoHandler = Practice.getInstance().getMongoHandler();
 
     public Kit(String name) {
         this.name = name;
-
-        this.icon = Material.GOLD_SWORD;
-        this.color = "&b&l";
 
         this.load();
         Practice.getInstance().getKitHandler().getKitHashMap().put(name.toLowerCase(), this);
@@ -83,6 +79,11 @@ public class Kit {
         });
     }
 
+    public void remove() {
+        Practice.getInstance().getKitHandler().getKitHashMap().remove(name);
+        mongoHandler.getKits().deleteOne(new Document("_id", name));
+    }
+
     public Document toBson() {
         return new Document("_id", name)
                 .append("contents", Serializer.itemStackArrayToBase64(contents))
@@ -95,9 +96,7 @@ public class Kit {
 
     public ItemStack getItem() {
         return new ItemBuilder(icon).name(elo ? CC.translate(color + name + "&7&l(Elo)") : CC.translate(color + name))
-                .lore(Arrays.asList(" ",
-                        color.replace("&l", "") + "Players In Queue&7: " + queue.getPlayersInQueue().size())
-                ).build();
+                .lore(color.replace("&l", "") + "Players In Queue&7: " + queue.getPlayersInQueue().size()).build();
     }
 
 }

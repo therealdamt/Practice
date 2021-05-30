@@ -17,10 +17,7 @@ public class RankedMenu extends Menu {
     public RankedMenu(Player player) {
         super(player, 0, CC.translate("&b&lRanked Queue"));
 
-        int number = Practice.getInstance().getKitHandler().getRankedKits().size();
-        int result = number % 9 == 0 ? number : number + (9 - (number % 9));
-
-        this.setSize(result);
+        this.setSize(this.getNumber(Practice.getInstance().getKitHandler().getRankedKits().size(), 9));
     }
 
     @Override
@@ -42,6 +39,8 @@ public class RankedMenu extends Menu {
 
         kit.getQueue().add(player);
         player.sendMessage(CC.translate("&7You have entered &b" + kit.getName() + "&7's queue! (Elo)"));
+
+        player.closeInventory();
     }
 
     @Override

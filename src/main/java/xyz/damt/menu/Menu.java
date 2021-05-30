@@ -53,4 +53,18 @@ public abstract class Menu {
         Practice.getInstance().getMenuHandler().getMenuHashMap().put(player.getUniqueId(), this);
     }
 
+    public int getNumber(int number, int multiple) {
+        int x = number;
+        int result = 0;
+
+        for (int i = x; i < multiple; i++) {
+            if (i % multiple == 0) {
+                result = i;
+                break;
+            }
+        }
+
+        return x;
+    }
+
 }

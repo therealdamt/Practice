@@ -3,6 +3,7 @@ package xyz.damt.commands;
 import me.vaperion.blade.command.annotation.Command;
 import me.vaperion.blade.command.annotation.Sender;
 import org.bukkit.entity.Player;
+import xyz.damt.Practice;
 import xyz.damt.menu.menus.UnrankedMenu;
 
 public class UnrankedCommand {
