@@ -9,9 +9,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import xyz.damt.Practice;
 import xyz.damt.handler.MongoHandler;
+import xyz.damt.kit.Kit;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -22,8 +26,11 @@ public class Profile {
     private int kills, deaths, gamesPlayed, wins, loses, elo, coins;
 
     private ItemStack[] lastInventoryContents, lastArmorContents;
+    private double lastHealth, lastFood;
+    private List<PotionEffect> lastPotionEffects;
 
     private final MongoHandler mongoHandler = Practice.getInstance().getMongoHandler();
+    private final HashMap<UUID, Kit> playersSentDuel = new HashMap<>();
 
     public Profile(UUID uuid) {
         this.uuid = uuid;

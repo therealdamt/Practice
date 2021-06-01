@@ -22,8 +22,7 @@ public class ViewCommand {
             return;
         }
 
-        ViewMenu viewMenu = new ViewMenu(sender, uuid);
-        viewMenu.updateMenu();
+        new ViewMenu(sender, uuid).updateMenu();
     }
 
 }

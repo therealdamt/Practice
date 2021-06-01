@@ -10,6 +10,7 @@ other:
 settings:
   use-placeholder: true
   required-wins: 10
+  coinshop-command: "/coinshop"
 
 mongo:
   host: "localhost"

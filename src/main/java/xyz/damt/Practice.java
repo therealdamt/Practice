@@ -4,7 +4,6 @@ import lombok.Getter;
 import me.vaperion.blade.Blade;
 import me.vaperion.blade.command.bindings.impl.BukkitBindings;
 import me.vaperion.blade.command.bindings.impl.DefaultBindings;
-import me.vaperion.blade.command.container.ContainerCreator;
 import me.vaperion.blade.command.container.impl.BukkitCommandContainer;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,12 +12,16 @@ import xyz.damt.arena.Arena;
 import xyz.damt.arena.ArenaHandler;
 import xyz.damt.arena.ArenaListener;
 import xyz.damt.commands.*;
-import xyz.damt.commands.providers.*;
+import xyz.damt.commands.providers.ArenaCommandProvider;
+import xyz.damt.commands.providers.KitCommandProvider;
+import xyz.damt.commands.providers.MaterialCommandProvider;
+import xyz.damt.commands.providers.QueueCommandProvider;
 import xyz.damt.config.ConfigHandler;
 import xyz.damt.handler.MongoHandler;
 import xyz.damt.handler.ServerHandler;
 import xyz.damt.kit.Kit;
 import xyz.damt.kit.KitHandler;
+import xyz.damt.listener.InteractListener;
 import xyz.damt.listener.ServerListener;
 import xyz.damt.listener.StatsListener;
 import xyz.damt.match.MatchHandler;
@@ -32,11 +35,8 @@ import xyz.damt.queue.QueueHandler;
 import xyz.damt.queue.listener.QueueListener;
 import xyz.damt.scoreboard.Adapter;
 import xyz.damt.tasks.MongoSaveTask;
-import xyz.damt.util.CC;
 import xyz.damt.util.assemble.Assemble;
 import xyz.damt.util.assemble.AssembleStyle;
-
-import java.util.UUID;
 
 @Getter
 public class Practice extends JavaPlugin {
@@ -91,6 +91,7 @@ public class Practice extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new MatchListener(), this);
         this.getServer().getPluginManager().registerEvents(new StatsListener(), this);
         this.getServer().getPluginManager().registerEvents(new ServerListener(), this);
+        this.getServer().getPluginManager().registerEvents(new InteractListener(), this);
 
         Blade.of().binding(new BukkitBindings()).binding(new DefaultBindings()).containerCreator(BukkitCommandContainer.CREATOR)
                 .bind(Kit.class, new KitCommandProvider(this))
@@ -99,7 +100,7 @@ public class Practice extends JavaPlugin {
                 .bind(Material.class, new MaterialCommandProvider())
                 .fallbackPrefix("practice").tabCompleter(bladeCommandService -> {
         }).build().register(new ViewCommand()).register(new RankedCommand()).register(new UnrankedCommand())
-        .register(new LeaveQueueCommand()).register(new KitCommand()).register(new ArenaCommand());
+        .register(new LeaveQueueCommand()).register(new KitCommand()).register(new ArenaCommand()).register(new EssentialCommands()).register(new DuelCommand());
 
         if (configHandler.getSettingsHandler().USE_PLACEHOLDER) {
             new PracticePlaceHolderHook(this).register();

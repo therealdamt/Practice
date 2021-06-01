@@ -10,7 +10,7 @@ public class UnrankedCommand {
 
     @Command(value = "unranked", quoted = false, description = "Opens Unranked Menu")
     public void unranked(@Sender Player sender) {
-        new UnrankedMenu(sender).updateMenu();
+        new UnrankedMenu(sender, null).updateMenu();
     }
 
 }

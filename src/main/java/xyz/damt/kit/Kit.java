@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import xyz.damt.Practice;
 import xyz.damt.handler.MongoHandler;
@@ -16,6 +17,9 @@ import xyz.damt.util.ItemBuilder;
 import xyz.damt.util.Serializer;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 @Setter

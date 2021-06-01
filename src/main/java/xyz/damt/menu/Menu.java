@@ -10,7 +10,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import xyz.damt.Practice;
-import xyz.damt.util.CC;
+import xyz.damt.util.ItemBuilder;
 
 import java.util.Map;
 
@@ -24,29 +24,23 @@ public abstract class Menu {
     }
 
     private final Player player;
-    private final Inventory inventory;
 
-    private int size;
-    private String title;
-    private boolean useFiller = false;
-    private ItemStack fillerBlock = new ItemStack(Material.STAINED_GLASS, 1, DyeColor.BLACK.getData());
+    protected boolean useFiller = false;
+    private ItemStack fillerBlock = new ItemBuilder(Material.STAINED_GLASS, 1, DyeColor.GRAY.getData()).name(" ").build();
 
-    public Menu(Player player, int size, String title) {
+    public Menu(Player player) {
         this.player = player;
-        this.size = size;
-        this.title = title;
+    }
 
-        this.inventory = Bukkit.createInventory(null, size, title);
+    public void updateMenu() {
+        Inventory inventory = Bukkit.createInventory(null, getSize(), getTitle());
 
         if (useFiller)
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < getSize(); i++)
                 getMap(player).put(i, fillerBlock);
 
         getMap(player).keySet().forEach(integer ->
                 inventory.setItem(integer, getMap(player).get(integer)));
-    }
-
-    public void updateMenu() {
 
         if (player.getOpenInventory().equals(inventory)) {
             player.updateInventory();
@@ -57,19 +51,11 @@ public abstract class Menu {
         Practice.getInstance().getMenuHandler().getMenuHashMap().put(player.getUniqueId(), this);
     }
 
-    public int getNumber(int number, int multiple) {
-        int x = number;
-
-        while (true) {
-            double check = x / multiple;
-            if (CC.isDouble(check)) {
-                x += 1;
-            } else {
-                break;
-            }
-        }
-
-        return x;
+    public int getSize() {
+        return 9;
     }
 
+    public String getTitle() {
+        return "Title";
+    }
 }

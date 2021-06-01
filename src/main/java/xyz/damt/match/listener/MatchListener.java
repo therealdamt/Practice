@@ -21,6 +21,8 @@ import xyz.damt.profile.Profile;
 import xyz.damt.util.CC;
 import xyz.damt.util.PacketUtils;
 
+import java.util.ArrayList;
+
 public class MatchListener implements Listener {
 
     private final Practice practice = Practice.getInstance();
@@ -66,9 +68,15 @@ public class MatchListener implements Listener {
 
         killerProfile.setLastInventoryContents(killer.getInventory().getContents());
         killerProfile.setLastArmorContents(killer.getInventory().getArmorContents());
+        killerProfile.setLastFood(killer.getFoodLevel());
+        killerProfile.setLastHealth(killer.getHealth());
+        killerProfile.setLastPotionEffects(new ArrayList<>(player.getActivePotionEffects()));
 
         userProfile.setLastArmorContents(player.getInventory().getArmorContents());
         userProfile.setLastInventoryContents(player.getInventory().getContents());
+        userProfile.setLastFood(player.getFoodLevel());
+        userProfile.setLastHealth(player.getHealth());
+        userProfile.setLastPotionEffects(new ArrayList<>(player.getActivePotionEffects()));
 
         match.stop(killer.getUniqueId(), 3);
     }

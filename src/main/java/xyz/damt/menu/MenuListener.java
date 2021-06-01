@@ -26,7 +26,7 @@ public class MenuListener implements Listener {
         Player player = (Player) e.getWhoClicked();
         Menu menu = menuHandler.getMenu(player.getUniqueId());
 
-        if (menu == null || menu.getInventory() == null) return;
+        if (menu == null) return;
 
         menu.click(player, e);
     }

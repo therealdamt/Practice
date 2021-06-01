@@ -9,15 +9,14 @@ import xyz.damt.menu.Menu;
 import xyz.damt.queue.Queue;
 import xyz.damt.util.CC;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class RankedMenu extends Menu {
 
     public RankedMenu(Player player) {
-        super(player, 9, CC.translate("&b&lRanked Queue"));
-
-        this.setSize(this.getNumber(Practice.getInstance().getKitHandler().getRankedKits().size(), 9));
+        super(player);
+        this.useFiller = true;
     }
 
     @Override
@@ -45,7 +44,7 @@ public class RankedMenu extends Menu {
 
     @Override
     public Map<Integer, ItemStack> getMap(Player player) {
-        final Map<Integer, ItemStack> map = new ConcurrentHashMap<>();
+        final Map<Integer, ItemStack> map = new HashMap<>();
 
         int i = 0;
 
@@ -55,5 +54,15 @@ public class RankedMenu extends Menu {
         }
 
         return map;
+    }
+
+    @Override
+    public int getSize() {
+        return 54;
+    }
+
+    @Override
+    public String getTitle() {
+        return CC.translate("&b&lRanked Menu");
     }
 }
