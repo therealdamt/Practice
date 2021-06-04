@@ -3,7 +3,7 @@ Mongo Practice Core, it's almost completed, the features below are the remaining
 
 * Spawn Items
 * Specatotor Items
-* Party System
+* Complete Party System
 * 2v2/Party Duels
 
 - The list above will be updated as the project is getting updated.

@@ -13,7 +13,9 @@ import org.bukkit.potion.PotionEffect;
 import xyz.damt.Practice;
 import xyz.damt.handler.MongoHandler;
 import xyz.damt.kit.Kit;
+import xyz.damt.party.Party;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -26,8 +28,11 @@ public class Profile {
     private int kills, deaths, gamesPlayed, wins, loses, elo, coins;
 
     private ItemStack[] lastInventoryContents, lastArmorContents;
+
+    private List<PotionEffect> lastPotionEffects = new ArrayList<>();
+    private List<Party> partyInvites = new ArrayList<>();
+
     private double lastHealth, lastFood;
-    private List<PotionEffect> lastPotionEffects;
 
     private final MongoHandler mongoHandler = Practice.getInstance().getMongoHandler();
     private final HashMap<UUID, Kit> playersSentDuel = new HashMap<>();

@@ -8,7 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -30,11 +29,11 @@ public class MatchListener implements Listener {
     @EventHandler
     public void onPlayerMoveEvent(PlayerMoveEvent e) {
         Player player = e.getPlayer();
-        Match match = practice.getMatchHandler().getMatch(player.getUniqueId());
-
-        if (match == null) return;
         if (e.getFrom().getBlockX() == e.getTo().getBlockX()
-                && e.getFrom().getBlockZ() == e.getTo().getBlockZ()) return;
+                && e.getFrom().getBlockZ() == e.getTo().getBlockZ() && e.getFrom().getBlockY() == e.getTo().getBlockY()) return;
+
+        Match match = practice.getMatchHandler().getMatch(player.getUniqueId());
+        if (match == null) return;
 
         if (!match.isHasStarted()) e.setCancelled(true);
     }
@@ -93,7 +92,7 @@ public class MatchListener implements Listener {
         match.stop(winner.getUniqueId(), 3);
     }
 
-     @EventHandler
+    @EventHandler
     public void onBlockPlaceEvent(BlockPlaceEvent e) {
         Player player = e.getPlayer();
         Match match = practice.getMatchHandler().getMatch(player.getUniqueId());
@@ -104,7 +103,7 @@ public class MatchListener implements Listener {
         player.sendMessage(CC.translate("&cYou may not build blocks whilst using a non-build kit!"));
     }
 
-   @EventHandler
+    @EventHandler
     public void onBlockBreakEvent(BlockBreakEvent e) {
         Player player = e.getPlayer();
         Match match = practice.getMatchHandler().getMatch(player.getUniqueId());

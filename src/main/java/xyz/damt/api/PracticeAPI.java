@@ -2,6 +2,7 @@ package xyz.damt.api;
 
 import org.bukkit.entity.Player;
 import xyz.damt.Practice;
+import xyz.damt.api.coin.CoinAPI;
 import xyz.damt.arena.Arena;
 import xyz.damt.config.ConfigHandler;
 import xyz.damt.kit.Kit;
@@ -14,9 +15,11 @@ import java.util.UUID;
 public class PracticeAPI {
 
     private final Practice practice;
+    private final CoinAPI coinAPI;
 
     public PracticeAPI(Practice practice) {
         this.practice = practice;
+        this.coinAPI = new CoinAPI(practice);
     }
 
     public Profile getProfile(UUID uuid) {
