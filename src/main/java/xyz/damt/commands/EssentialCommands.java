@@ -7,6 +7,9 @@ import me.vaperion.blade.command.annotation.Sender;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import xyz.damt.Practice;
+import xyz.damt.match.Match;
+import xyz.damt.profile.Profile;
 import xyz.damt.util.CC;
 
 public class EssentialCommands {
@@ -57,4 +60,45 @@ public class EssentialCommands {
     public void broadcast(@Sender Player player, @Combined String broadcast) {
         Bukkit.getServer().broadcastMessage(CC.translate(broadcast));
     }
+
+    @Command(value = "build", quoted = false, description = "Build Command")
+    @Permission(value = "practice.build", message = "You are not allowed to execute this command!")
+    public void build(@Sender Player player) {
+        Profile profile = Practice.getInstance().getProfileHandler().getProfile(player.getUniqueId());
+
+        if (profile.isBuild()) {
+            profile.setBuild(false);
+        } else {
+            profile.setBuild(true);
+        }
+
+        player.sendMessage(CC.translate("&7You have set your build mode to &b" + profile.isBuild()));
+    }
+
+    @Command(value = "ping", quoted = false, async = true, description = "Ping Command")
+    public void ping(@Sender Player player) {
+        Profile profile = Practice.getInstance().getProfileHandler().getProfile(player.getUniqueId());
+        player.sendMessage(CC.translate("&7Your ping is &b" + profile.getPing() + "&7!"));
+    }
+
+    @Command(value = "spawn", quoted = false, async = true, description = "Spawn Command")
+    public void spawn(@Sender Player player) {
+        Match match = Practice.getInstance().getMatchHandler().getMatch(player.getUniqueId());
+
+        if (match != null) {
+            player.sendMessage(CC.translate("&cYou may not do this whilst inside of a match!"));
+            return;
+        }
+
+        player.teleport(Practice.getInstance().getServerHandler().getSpawnLocation());
+        player.sendMessage(CC.translate("&7Teleported to &bspawn&7!"));
+    }
+
+    @Command(value = "setspawn", quoted = false, async = true, description = "SetSpawn Command")
+    @Permission(value = "practice.setspawn", message = "You are not allowed to execute this command!")
+    public void setSpawn(@Sender Player player) {
+        Practice.getInstance().getServerHandler().setSpawnLocation(player.getLocation());
+        player.sendMessage(CC.translate("&7Set the spawn loaction to &byour location&7!"));
+    }
+
 }

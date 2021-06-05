@@ -3,6 +3,9 @@ package xyz.damt.match.listener;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,15 +14,21 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 import xyz.damt.Practice;
 import xyz.damt.events.MatchEndEvent;
 import xyz.damt.kit.KitType;
 import xyz.damt.match.Match;
+import xyz.damt.match.MatchState;
 import xyz.damt.profile.Profile;
 import xyz.damt.util.CC;
 import xyz.damt.util.PacketUtils;
+import xyz.damt.util.TextBuilder;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class MatchListener implements Listener {
@@ -30,7 +39,7 @@ public class MatchListener implements Listener {
     public void onPlayerMoveEvent(PlayerMoveEvent e) {
         Player player = e.getPlayer();
         if (e.getFrom().getBlockX() == e.getTo().getBlockX()
-                && e.getFrom().getBlockZ() == e.getTo().getBlockZ() && e.getFrom().getBlockY() == e.getTo().getBlockY()) return;
+                && e.getFrom().getBlockZ() == e.getTo().getBlockZ()) return;
 
         Match match = practice.getMatchHandler().getMatch(player.getUniqueId());
         if (match == null) return;
@@ -55,12 +64,18 @@ public class MatchListener implements Listener {
         if (!(e.getEntity() instanceof Player)) return;
         if (!(e.getEntity().getKiller() instanceof Player)) return;
 
+        e.setDeathMessage(null);
+
         Player player = e.getEntity();
         Player killer = e.getEntity().getKiller();
 
         Match match = practice.getMatchHandler().getMatch(player.getUniqueId());
-
         if (match == null) return;
+
+        match.setMatchState(MatchState.IS_ENDING);
+
+        Location location = player.getLocation();
+        Bukkit.getScheduler().runTaskLaterAsynchronously(Practice.getInstance(), () -> player.teleport(location), 5L);
 
         Profile killerProfile = Practice.getInstance().getProfileHandler().getProfile(killer.getUniqueId());
         Profile userProfile = Practice.getInstance().getProfileHandler().getProfile(player.getUniqueId());
@@ -117,22 +132,27 @@ public class MatchListener implements Listener {
     @EventHandler
     public void onMatchEndEvent(MatchEndEvent e) {
 
-        TextComponent winner = createTextComponent(e.getWinner().getName(), ChatColor.GRAY, true, true);
-        winner.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/view " + e.getWinner().getUniqueId().toString()));
+        TextComponent winner = new TextBuilder().setText("Winner: ").setColor(ChatColor.AQUA).setBold(false).build();
 
-        TextComponent finalWinner = createTextComponent("Winner: ", ChatColor.AQUA, true, false);
-        finalWinner.addExtra(winner);
+        TextBuilder builder = new TextBuilder().setText(e.getWinner().getName()).setColor(ChatColor.GREEN)
+                .setBold(true).setUnderline(true).setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+                "/view " + e.getWinner().getUniqueId().toString()));
 
-        TextComponent loser = createTextComponent(e.getLoser().getName(), ChatColor.GRAY, true, true);
-        loser.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/view " + e.getLoser().getUniqueId().toString()));
+        winner.addExtra(builder.build());
 
-        TextComponent finalLoser = createTextComponent("Loser: ", ChatColor.RED, true, false);
-        finalLoser.addExtra(loser);
+        TextComponent loser = new TextBuilder()
+                .setText("Loser: ").setColor(ChatColor.AQUA).setBold(false).build();
+
+        TextBuilder builder1 = new TextBuilder().setText(e.getLoser().getName()).setColor(ChatColor.RED)
+                .setBold(true).setUnderline(true).setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+                "/view " + e.getLoser().getUniqueId().toString()));
+
+        loser.addExtra(builder1.build());
 
         e.getMatch().playersToList().forEach(player -> {
             player.sendMessage(CC.translate("&7&m---------------------"));
-            player.spigot().sendMessage(finalWinner);
-            player.spigot().sendMessage(finalLoser);
+            player.spigot().sendMessage(winner);
+            player.spigot().sendMessage(loser);
             player.sendMessage(" ");
             player.sendMessage(CC.translate("&7&oClick on the names to check the inventory!"));
             player.sendMessage(CC.translate("&7&m---------------------"));
@@ -143,16 +163,6 @@ public class MatchListener implements Listener {
 
         PacketUtils.sendTitle(Practice.getInstance(), e.getLoser(), CC.translate("&c&lDEFEAT!"),
                 CC.translate("&c" + e.getWinner().getName() + " was the winner!"), 20, 3 * 20, 20);
-    }
-
-    private TextComponent createTextComponent(String name, ChatColor color, boolean bold, boolean underLined) {
-
-        TextComponent textComponent = new TextComponent(name);
-        textComponent.setColor(color);
-        textComponent.setBold(bold);
-        textComponent.setUnderlined(underLined);
-
-        return textComponent;
     }
 
 

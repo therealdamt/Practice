@@ -25,6 +25,7 @@ import java.util.UUID;
 public class Profile {
 
     private final UUID uuid;
+    private boolean build;
     private int kills, deaths, gamesPlayed, wins, loses, elo, coins;
 
     private ItemStack[] lastInventoryContents, lastArmorContents;

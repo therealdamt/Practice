@@ -20,6 +20,8 @@ public class KitHandler {
 
     public KitHandler(Practice practice) {
         this.practice = practice;
+
+        this.load();
     }
 
     public void load() {

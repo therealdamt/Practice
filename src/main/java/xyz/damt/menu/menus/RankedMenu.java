@@ -16,7 +16,6 @@ public class RankedMenu extends Menu {
 
     public RankedMenu(Player player) {
         super(player);
-        this.useFiller = true;
     }
 
     @Override
@@ -57,8 +56,13 @@ public class RankedMenu extends Menu {
     }
 
     @Override
+    public boolean useFiller() {
+        return true;
+    }
+
+    @Override
     public int getSize() {
-        return 54;
+        return Practice.getInstance().getKitHandler().getRankedKits().size();
     }
 
     @Override

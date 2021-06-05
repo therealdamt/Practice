@@ -5,6 +5,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import xyz.damt.Practice;
 import xyz.damt.arena.Arena;
+import xyz.damt.events.QueueJoinEvent;
+import xyz.damt.events.QueueLeaveEvent;
 import xyz.damt.kit.Kit;
 import xyz.damt.match.Match;
 import xyz.damt.profile.Profile;
@@ -47,12 +49,15 @@ public class Queue {
             int difference = oneProfile.getElo() - twoProfile.getElo();
 
             if (difference <= 250) {
-                playersInQueue.remove(i);
+                playersInQueue.remove(1);
                 playersInQueue.remove(0);
 
                 if (arena == null) {
                     one.sendMessage(CC.translate("&cThere is no empty arena for you to join!"));
                     two.sendMessage(CC.translate("&cThere is no empty arena for you to join!"));
+
+                    Bukkit.getPluginManager().callEvent(new QueueLeaveEvent(this, one));
+                    Bukkit.getPluginManager().callEvent(new QueueLeaveEvent(this, two));
                     return;
                 }
 
@@ -72,6 +77,9 @@ public class Queue {
         if (arena == null) {
             one.sendMessage(CC.translate("&cThere is no empty arena for you to join!"));
             two.sendMessage(CC.translate("&cThere is no empty arena for you to join!"));
+
+            Bukkit.getPluginManager().callEvent(new QueueLeaveEvent(this, one));
+            Bukkit.getPluginManager().callEvent(new QueueLeaveEvent(this, two));
             return;
         }
 
@@ -80,10 +88,14 @@ public class Queue {
 
     public void add(Player player) {
         playersInQueue.add(player.getUniqueId());
+
+        Bukkit.getPluginManager().callEvent(new QueueJoinEvent(this, player));
     }
 
     public void remove(Player player) {
         playersInQueue.remove(player.getUniqueId());
+
+        Bukkit.getPluginManager().callEvent(new QueueLeaveEvent(this, player));
     }
 
     public boolean IsInQueue(Player player) {

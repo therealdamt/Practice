@@ -18,6 +18,8 @@ public class ProfileHandler {
     public ProfileHandler(Practice practice) {
         this.practice = practice;
         this.profileHashMap = new HashMap<>();
+
+        this.load();
     }
 
     public void load() {

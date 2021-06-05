@@ -1,11 +1,17 @@
 package xyz.damt.commands;
 
+import javafx.scene.paint.Color;
 import me.vaperion.blade.command.annotation.Command;
+import me.vaperion.blade.command.annotation.Name;
 import me.vaperion.blade.command.annotation.Sender;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.entity.Player;
 import xyz.damt.Practice;
 import xyz.damt.party.Party;
+import xyz.damt.profile.Profile;
 import xyz.damt.util.CC;
+import xyz.damt.util.TextBuilder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +24,9 @@ public class PartyCommand {
             "&b/party disband &7- Disbands a party",
             "&b/party leave &7- Leaves a party",
             "&b/party open &7- Opens the party",
+            "&b/party invite <player> &7- Invites a player to the party",
+            "&b/party kick <player> &7- Kicks a player out of your party",
+            "&b/party uninvite <player> &7- Uninvites a player you have previously invited",
             "&7&m------------&b&lParty Help Commands&7&m------------"
     );
 
@@ -98,6 +107,36 @@ public class PartyCommand {
         }
 
         player.sendMessage(CC.translate("&7You have set the party's open status to &b" + party.isOpen()));
+    }
+
+    @Command(value = "party invite", async = true, quoted = false, description = "Party Invite Command")
+    public void partyInviteCommand(@Sender Player player, @Name("player") Player target) {
+        Party party = Practice.getInstance().getPartyHandler().getParty(player.getUniqueId());
+
+        if (party == null) {
+            player.sendMessage(CC.translate("&cYou must be in a party to do this command!"));
+            return;
+        }
+
+        if (!party.isLeader(player.getUniqueId())) {
+            player.sendMessage(CC.translate("&cYou must be the leader of the party to do this command!"));
+            return;
+        }
+
+        Profile profile = Practice.getInstance().getProfileHandler().getProfile(target.getUniqueId());
+
+        if (profile.getPartyInvites().contains(party)) {
+            player.sendMessage(CC.translate("&cThat user already has a party invite!"));
+            return;
+        }
+
+        profile.getPartyInvites().add(party);
+
+        player.sendMessage(CC.translate("&7You have invited the player &b" + target.getName() + "&7 to your party!"));
+
+        target.sendMessage("&7You have been invited to &b" + player.getName() + "'s party&7!");
+        target.spigot().sendMessage(new TextBuilder().setText("Click here to accept!").setColor(ChatColor.AQUA)
+                .setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party accept " + player.getName())).build());
     }
 
 }

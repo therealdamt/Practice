@@ -1,5 +1,6 @@
 package xyz.damt.kit;
 
+import com.mongodb.client.model.DeleteOptions;
 import com.mongodb.client.model.ReplaceOptions;
 import lombok.Getter;
 import lombok.Setter;
@@ -90,9 +91,11 @@ public class Kit {
             return;
         }
 
-        Practice.getInstance().getKitHandler().getKitHashMap().remove(name);
+        System.out.println("s");
+
+        Practice.getInstance().getKitHandler().getKitHashMap().remove(name, this);
         Practice.getInstance().getArenaHandler().getArenasOfKit(this).forEach(arena -> arena.getKits().remove(this));
-        mongoHandler.getKits().deleteOne(new Document("_id", name));
+        mongoHandler.getKits().deleteOne(new Document("_id", name), new DeleteOptions());
     }
 
     public Document toBson() {

@@ -14,6 +14,7 @@ import xyz.damt.arena.ArenaListener;
 import xyz.damt.commands.*;
 import xyz.damt.commands.providers.*;
 import xyz.damt.config.ConfigHandler;
+import xyz.damt.handler.CooldownHandler;
 import xyz.damt.handler.MongoHandler;
 import xyz.damt.handler.ServerHandler;
 import xyz.damt.kit.Kit;
@@ -53,6 +54,7 @@ public class Practice extends JavaPlugin {
     private QueueHandler queueHandler;
     private MenuHandler menuHandler;
     private PracticeAPI practiceAPI;
+    private CooldownHandler cooldownHandler;
     private PartyHandler partyHandler;
 
     @Override
@@ -71,18 +73,14 @@ public class Practice extends JavaPlugin {
         this.practiceAPI = new PracticeAPI(this);
         this.menuHandler = new MenuHandler(this);
         this.partyHandler = new PartyHandler(this);
-
         this.profileHandler = new ProfileHandler(this);
-        this.profileHandler.load();
-
         this.kitHandler = new KitHandler(this);
-        this.kitHandler.load();
-
         this.arenaHandler = new ArenaHandler(this);
-        this.arenaHandler.load();
+
+        this.cooldownHandler = new CooldownHandler();
 
         this.registerPlugin();
-        new Assemble(this, new Adapter(this), AssembleStyle.KOHI, 10);
+        new Assemble(this, new Adapter(this), AssembleStyle.KOHI, 2L);
         new MongoSaveTask(this).runTaskTimerAsynchronously(this, 500 * 20L, 500 * 20L);
     }
 

@@ -24,9 +24,8 @@ public abstract class Menu {
     }
 
     private final Player player;
-
-    protected boolean useFiller = false;
-    private ItemStack fillerBlock = new ItemBuilder(Material.STAINED_GLASS, 1, DyeColor.GRAY.getData()).name(" ").build();
+    private ItemStack fillerBlock
+            = new ItemBuilder(Material.STAINED_GLASS_PANE).data(DyeColor.BLACK.getData()).name(" ").build();
 
     public Menu(Player player) {
         this.player = player;
@@ -35,12 +34,15 @@ public abstract class Menu {
     public void updateMenu() {
         Inventory inventory = Bukkit.createInventory(null, getSize(), getTitle());
 
-        if (useFiller)
-            for (int i = 0; i < getSize(); i++)
+        if (useFiller()) {
+            for (int i = 0; i < getSize(); i++) {
                 getMap(player).put(i, fillerBlock);
+            }
+        }
 
-        getMap(player).keySet().forEach(integer ->
-                inventory.setItem(integer, getMap(player).get(integer)));
+        getMap(player).keySet().forEach(integer -> {
+            inventory.setItem(integer, getMap(player).get(integer));
+        });
 
         if (player.getOpenInventory().equals(inventory)) {
             player.updateInventory();
@@ -51,11 +53,26 @@ public abstract class Menu {
         Practice.getInstance().getMenuHandler().getMenuHashMap().put(player.getUniqueId(), this);
     }
 
+    public int getNumber(int size) {
+        if (size <= 9) return 9;
+        if (size <= 18) return 18;
+        if (size <= 27) return 27;
+        if (size <= 36) return 36;
+        if (size <= 45) return 45;
+        if (size <= 54) return 54;
+        return 9;
+    }
+
     public int getSize() {
         return 9;
+    }
+
+    public boolean useFiller() {
+        return false;
     }
 
     public String getTitle() {
         return "Title";
     }
+
 }

@@ -16,7 +16,8 @@ public class ArenaCommand {
             "&7&m-------&b&lArena Help Commands&7&m-------",
             "&b/arena list &7- Lists all available arenas",
             "&b/arena create <name> &7- Creates an arena",
-            "&b/arena delete <name> &7- Deletes an arean",
+            "&b/arena delete <name> &7- Deletes an arena",
+            "&b/arena tp <arena> &7- Teleports to the arena",
             "&b/arena corner <arena> <corner> &7- Sets the corner",
             "&b/arena position <arena> <number> &7- Sets the position",
             "&b/arena addkit <arena> <kit> &7- Adds a kit to the arena",
@@ -94,7 +95,7 @@ public class ArenaCommand {
     @Permission(value = "practice.arena", message = "You are not allowed to execute this command!")
     public void arenaDeleteCommand(@Sender Player player, @Name("arena") Arena arena) {
         arena.remove(true);
-        player.sendMessage(CC.translate("&7Deleted the arena &b" + arena + "&7!"));
+        player.sendMessage(CC.translate("&7Deleted the arena &b" + arena.getName() + "&7!"));
     }
 
     /**
@@ -214,4 +215,21 @@ public class ArenaCommand {
         });
     }
 
+    /**
+     * Arena Teleport Command
+     * @param player sender
+     * @param arena to teleport to
+     */
+
+    @Command(value = "arena tp", quoted = false, description = "Arena Teleport Command")
+    @Permission(value = "practice.arena", message = "You are not allowed to execute this command!")
+    public void arenaTpComand(@Sender Player player, @Name("arena") Arena arena) {
+        if (arena.getCenter() == null) {
+            player.sendMessage(CC.translate("&cThis arena is not setup yet!"));
+            return;
+        }
+
+        player.teleport(arena.getCenter());
+        player.sendMessage(CC.translate("&7Teleported to the arena &b" + arena.getName() + "&7!"));
+    }
 }

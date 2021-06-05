@@ -20,7 +20,6 @@ public class DuelRequestsMenu extends Menu {
 
     public DuelRequestsMenu(Player player) {
         super(player);
-        this.useFiller = true;
     }
 
     @Override
@@ -62,7 +61,12 @@ public class DuelRequestsMenu extends Menu {
 
     @Override
     public int getSize() {
-        return 54;
+        return getNumber(Practice.getInstance().getProfileHandler().getProfile(this.getPlayer().getUniqueId()).getPlayersSentDuel().size());
+    }
+
+    @Override
+    public boolean useFiller() {
+        return true;
     }
 
     @Override

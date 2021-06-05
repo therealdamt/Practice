@@ -24,7 +24,6 @@ public class UnrankedMenu extends Menu {
         super(player);
 
         this.target = target;
-        this.useFiller = true;
     }
 
     @Override
@@ -92,7 +91,12 @@ public class UnrankedMenu extends Menu {
     }
 
     @Override
+    public boolean useFiller() {
+        return true;
+    }
+
+    @Override
     public int getSize() {
-        return 54;
+        return getNumber(Practice.getInstance().getKitHandler().getUnrankedKits().size());
     }
 }

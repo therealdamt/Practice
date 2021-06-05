@@ -19,6 +19,8 @@ public class ArenaHandler {
     public ArenaHandler(Practice practice) {
         this.practice = practice;
         this.arenaHashMap = new HashMap<>();
+
+        this.load();
     }
 
     public void load() {

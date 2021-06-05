@@ -10,8 +10,6 @@ import xyz.damt.arena.Arena;
 import xyz.damt.events.MatchEndEvent;
 import xyz.damt.events.MatchStartEvent;
 import xyz.damt.kit.Kit;
-import xyz.damt.profile.Profile;
-import xyz.damt.util.CC;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +26,7 @@ public class Match {
     private final Kit kit;
 
     private boolean hasStarted;
+    private MatchState matchState;
     private boolean isElo;
     private int countdownTime;
 
@@ -37,6 +36,7 @@ public class Match {
         this.arena = arena;
         this.isElo = isElo;
         this.kit = kit;
+        this.matchState = MatchState.IS_STARTING;
 
         this.countdownTime = 5;
 
@@ -57,6 +57,12 @@ public class Match {
         playerTwo.getInventory().setContents(kit.getContents());
         playerTwo.getInventory().setArmorContents(kit.getArmorContents());
 
+        playerOne.setHealth(20D);
+        playerOne.setFoodLevel(20);
+
+        playerTwo.setHealth(20D);
+        playerTwo.setFoodLevel(20);
+
         spectators.forEach(spectator -> spectator.teleport(arena.getCenter()));
         arena.setBusy(true);
 
@@ -69,8 +75,13 @@ public class Match {
                 new MatchEndEvent(this, playerOne, playerTwo) : new MatchEndEvent(this, playerTwo, playerOne);
         Bukkit.getPluginManager().callEvent(matchEndEvent);
 
+        this.matchState = MatchState.ENDED;
+
         playerOne.setGameMode(GameMode.CREATIVE);
         playerTwo.setGameMode(GameMode.CREATIVE);
+
+        playerOne.getInventory().clear();
+        playerTwo.getInventory().clear();
 
         playerOne.spigot().respawn();
         playerTwo.spigot().respawn();
@@ -83,6 +94,7 @@ public class Match {
                 if (player != null) {
                     player.teleport(Practice.getInstance().getServerHandler().getSpawnLocation());
                     Practice.getInstance().getServerHandler().giveSpawnItems(player);
+                    player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
                 }
             });
 
@@ -90,6 +102,11 @@ public class Match {
             arena.rollback();
             arena.setBusy(false);
         }, time * 20L);
+    }
+
+    public void setHasStarted(boolean value) {
+        this.hasStarted = value;
+        this.matchState = MatchState.STARTED;
     }
 
     public Player getOpponent(Player player) {
