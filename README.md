@@ -28,6 +28,25 @@ Hello everyone, my name is damt and today I present to you a fully custom practi
 ### Configuration
 
 ```yml
+other:
+  join-message:
+    - "&7&m---------------------------------"
+    - "              &b&lPractice"
+    - " "
+    - "&b&lWelcome &7to &b&lPractice"
+    - "&7This core was created by &b&ldamt"
+    - " "
+    - "&b&l* &7To duel a specific user do &b&l/duel"
+    - "&b&l* &7To queue a match&b&l, click on the sword!"
+    - "&7&m---------------------------------"
+
+settings:
+  use-placeholder: true
+  spawn-world: "world"
+  required-wins: 10
+  pearl-cooldown: 16
+  coinshop-command: "/coinshop"
+
 mongo:
   host: "localhost"
   port: 27017
@@ -41,23 +60,29 @@ scoreboard:
   title: "&b&lPractice"
   normal:
     - "&7&m--------------------"
-    - "&b&lPlayer Name&7: {player}"
+    - "&b&lOnline&7: {online}"
+    - "&b&lPlaying&7: {queue}"
     - " "
-    - "&b&lWins&7: {wins}"
-    - "&b&lLoses&7: {loses}"
-    - "&b&lCoins&7: {coins}"
-    - " "
-    - "&b&lPlayers Online&7: {online}"
-    - "&b&lPlayers In Queue &7: {queue}"
+    - "&7damt.xyz"
     - "&7&m--------------------"
   in-game:
     - "&7&m--------------------"
-    - "&b&lYou&7: {player} &b({player_ping})"
-    - "&b&lOpponent&7: {opponent} &b({opponent_ping}"
+    - "&b&lOpponent&7: {opponent}"
     - " "
-    - "&b&lKit&7: {kit}"
+    - "&b&lYour Ping&7: {player_ping}"
+    - "&b&lTheir Ping&7: {opponent_ping}"
+    - " "
+    - "&7damt.xyz"
     - "&7&m--------------------"
-
+  enderpearl-cooldown:
+    - "&7&m--------------------"
+    - "&b&lEnderpearl&7: {time}"
+    - " "
+    - "&b&lYour Ping&7: {player_ping}"
+    - "&b&lTheir Ping&7: {opponent_ping}"
+    - " "
+    - "&7damt.xyz"
+    - "&7&m--------------------"
 ```
 
 ### Contact
