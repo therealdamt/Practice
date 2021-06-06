@@ -10,6 +10,7 @@ import xyz.damt.arena.Arena;
 import xyz.damt.events.MatchEndEvent;
 import xyz.damt.events.MatchStartEvent;
 import xyz.damt.kit.Kit;
+import xyz.damt.profile.Profile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,23 +72,20 @@ public class Match {
     }
 
     public void stop(UUID uuid, int time) {
-        MatchEndEvent matchEndEvent = playerOne.getUniqueId().equals(uuid) ?
-                new MatchEndEvent(this, playerOne, playerTwo) : new MatchEndEvent(this, playerTwo, playerOne);
-        Bukkit.getPluginManager().callEvent(matchEndEvent);
+        Practice.getInstance().getMatchHandler().getMatchHashMap().remove(playerOne.getUniqueId());
+        Practice.getInstance().getMatchHandler().getMatchHashMap().remove(playerTwo.getUniqueId());
 
         this.matchState = MatchState.ENDED;
 
         playerOne.setGameMode(GameMode.CREATIVE);
         playerTwo.setGameMode(GameMode.CREATIVE);
 
-        playerOne.getInventory().clear();
-        playerTwo.getInventory().clear();
-
         playerOne.spigot().respawn();
         playerTwo.spigot().respawn();
 
-        Practice.getInstance().getMatchHandler().getMatchHashMap().remove(playerOne.getUniqueId());
-        Practice.getInstance().getMatchHandler().getMatchHashMap().remove(playerTwo.getUniqueId());
+        MatchEndEvent matchEndEvent = playerOne.getUniqueId().equals(uuid) ?
+                new MatchEndEvent(this, playerOne, playerTwo) : new MatchEndEvent(this, playerTwo, playerOne);
+        Bukkit.getPluginManager().callEvent(matchEndEvent);
 
         Bukkit.getScheduler().runTaskLater(Practice.getInstance(), () -> {
             playersToList().forEach(player -> {

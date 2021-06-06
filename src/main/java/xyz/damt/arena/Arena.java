@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import xyz.damt.Practice;
 import xyz.damt.handler.MongoHandler;
@@ -13,6 +14,7 @@ import xyz.damt.kit.Kit;
 import xyz.damt.util.LocationUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +30,7 @@ public class Arena {
 
     private List<Kit> kits;
     private List<Block> blocksBuilt;
+    private HashMap<Block, Material> blockBroken;
     private boolean isBusy;
 
     private final MongoHandler mongoHandler = Practice.getInstance().getMongoHandler();
@@ -37,6 +40,7 @@ public class Arena {
 
         this.kits = new ArrayList<>();
         this.blocksBuilt = new ArrayList<>();
+        this.blockBroken = new HashMap<>();
         this.isBusy = false;
 
         this.load();
@@ -82,6 +86,12 @@ public class Arena {
         blocksBuilt.forEach(block -> {
             if (block != null) block.setType(null);
         });
+
+        blockBroken.keySet().forEach(block -> {
+            block.setType(blockBroken.get(block));
+        });
+
+        blockBroken.clear();
         blocksBuilt.clear();
     }
 

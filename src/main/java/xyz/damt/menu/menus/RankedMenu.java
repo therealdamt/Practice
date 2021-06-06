@@ -45,11 +45,8 @@ public class RankedMenu extends Menu {
     public Map<Integer, ItemStack> getMap(Player player) {
         final Map<Integer, ItemStack> map = new HashMap<>();
 
-        int i = 0;
-
         for (Kit kit : Practice.getInstance().getKitHandler().getRankedKits()) {
-            map.put(i, kit.getItem());
-            i++;
+            map.put(kit.getPriority(), kit.getItem());
         }
 
         return map;
@@ -62,7 +59,7 @@ public class RankedMenu extends Menu {
 
     @Override
     public int getSize() {
-        return Practice.getInstance().getKitHandler().getRankedKits().size();
+        return getNumber(Practice.getInstance().getKitHandler().getRankedKits().size());
     }
 
     @Override

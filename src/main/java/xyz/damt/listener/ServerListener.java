@@ -89,17 +89,21 @@ public class ServerListener implements Listener {
     @EventHandler
     public void onBlockPlaceEvent(BlockPlaceEvent e) {
         Player player = e.getPlayer();
-        Profile profile = Practice.getInstance().getProfileHandler().getProfile(player.getUniqueId());
 
-        if (!profile.isBuild()) e.setCancelled(true);
+        Profile profile = Practice.getInstance().getProfileHandler().getProfile(player.getUniqueId());
+        Match match = Practice.getInstance().getMatchHandler().getMatch(player.getUniqueId());
+
+        if (!profile.isBuild() && match == null) e.setCancelled(true);
     }
 
     @EventHandler
     public void onBlockBreakEvent(BlockBreakEvent e) {
         Player player = e.getPlayer();
-        Profile profile = Practice.getInstance().getProfileHandler().getProfile(player.getUniqueId());
 
-        if (!profile.isBuild()) e.setCancelled(true);
+        Profile profile = Practice.getInstance().getProfileHandler().getProfile(player.getUniqueId());
+        Match match = Practice.getInstance().getMatchHandler().getMatch(player.getUniqueId());
+
+        if (!profile.isBuild() && match == null) e.setCancelled(true);
     }
 
     @EventHandler

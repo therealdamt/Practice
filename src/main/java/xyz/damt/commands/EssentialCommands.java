@@ -1,9 +1,6 @@
 package xyz.damt.commands;
 
-import me.vaperion.blade.command.annotation.Combined;
-import me.vaperion.blade.command.annotation.Command;
-import me.vaperion.blade.command.annotation.Permission;
-import me.vaperion.blade.command.annotation.Sender;
+import me.vaperion.blade.command.annotation.*;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -99,6 +96,26 @@ public class EssentialCommands {
     public void setSpawn(@Sender Player player) {
         Practice.getInstance().getServerHandler().setSpawnLocation(player.getLocation());
         player.sendMessage(CC.translate("&7Set the spawn loaction to &byour location&7!"));
+    }
+
+    @Command(value = "debug", quoted = false, async = true, description = "Debug Command")
+    @Permission(value = "practice.op", message = "You are not allowed to execute this command!")
+    public void debugCommand(@Sender Player player, @Name("wins") int wins, @Name("loses") int loses,
+                             @Name("kills") int kills, @Name("deaths") int deaths, @Name("coins") int coins) {
+        try {
+            Profile profile = Practice.getInstance().getProfileHandler().getProfile(player.getUniqueId());
+
+            profile.setCoins(coins);
+            profile.setKills(kills);
+            profile.setWins(wins);
+            profile.setLoses(loses);
+            profile.setDeaths(deaths);
+
+            player.sendMessage(CC.translate("&7The debug command has worked &b%100&7!"));
+        } catch (Exception e) {
+            player.sendMessage(CC.translate("&cThe exception " + e.getCause() + " has been made!"));
+            e.printStackTrace();
+        }
     }
 
 }

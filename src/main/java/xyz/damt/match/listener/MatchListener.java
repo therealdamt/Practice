@@ -77,21 +77,6 @@ public class MatchListener implements Listener {
         Location location = player.getLocation();
         Bukkit.getScheduler().runTaskLaterAsynchronously(Practice.getInstance(), () -> player.teleport(location), 5L);
 
-        Profile killerProfile = Practice.getInstance().getProfileHandler().getProfile(killer.getUniqueId());
-        Profile userProfile = Practice.getInstance().getProfileHandler().getProfile(player.getUniqueId());
-
-        killerProfile.setLastInventoryContents(killer.getInventory().getContents());
-        killerProfile.setLastArmorContents(killer.getInventory().getArmorContents());
-        killerProfile.setLastFood(killer.getFoodLevel());
-        killerProfile.setLastHealth(killer.getHealth());
-        killerProfile.setLastPotionEffects(new ArrayList<>(player.getActivePotionEffects()));
-
-        userProfile.setLastArmorContents(player.getInventory().getArmorContents());
-        userProfile.setLastInventoryContents(player.getInventory().getContents());
-        userProfile.setLastFood(player.getFoodLevel());
-        userProfile.setLastHealth(player.getHealth());
-        userProfile.setLastPotionEffects(new ArrayList<>(player.getActivePotionEffects()));
-
         match.stop(killer.getUniqueId(), 3);
     }
 
@@ -127,6 +112,27 @@ public class MatchListener implements Listener {
 
         e.setCancelled(true);
         player.sendMessage(CC.translate("&cYou may not break blocks whilst using a non-build kit!"));
+    }
+
+    @EventHandler
+    public void onProfileUpdate(MatchEndEvent e) {
+        Player killer = e.getWinner();
+        Player player = e.getLoser();
+
+        Profile killerProfile = Practice.getInstance().getProfileHandler().getProfile(killer.getUniqueId());
+        Profile userProfile = Practice.getInstance().getProfileHandler().getProfile(player.getUniqueId());
+
+        killerProfile.setLastInventoryContents(killer.getInventory().getContents());
+        killerProfile.setLastArmorContents(killer.getInventory().getArmorContents());
+        killerProfile.setLastFood(killer.getFoodLevel());
+        killerProfile.setLastHealth(killer.getHealth());
+        killerProfile.setLastPotionEffects(new ArrayList<>(player.getActivePotionEffects()));
+
+        userProfile.setLastArmorContents(player.getInventory().getArmorContents());
+        userProfile.setLastInventoryContents(player.getInventory().getContents());
+        userProfile.setLastFood(player.getFoodLevel());
+        userProfile.setLastHealth(player.getHealth());
+        userProfile.setLastPotionEffects(new ArrayList<>(player.getActivePotionEffects()));
     }
 
     @EventHandler

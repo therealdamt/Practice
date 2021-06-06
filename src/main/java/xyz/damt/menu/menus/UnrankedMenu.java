@@ -75,11 +75,8 @@ public class UnrankedMenu extends Menu {
     public Map<Integer, ItemStack> getMap(Player player) {
         final Map<Integer, ItemStack> map = new HashMap<>();
 
-        int i = 0;
-
         for (Kit kit : Practice.getInstance().getKitHandler().getUnrankedKits()) {
-            map.put(i, kit.getItem());
-            i++;
+            map.put(kit.getPriority(), kit.getItem());
         }
 
         return map;
@@ -87,6 +84,7 @@ public class UnrankedMenu extends Menu {
 
     @Override
     public String getTitle() {
+        if (target != null) return target.getName() + "'s Duel";
         return CC.translate("&c&lUnranked Menu");
     }
 

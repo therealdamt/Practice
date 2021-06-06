@@ -41,6 +41,8 @@ public class Serializer {
      * @throws IllegalStateException
      */
     public static String itemStackArrayToBase64(ItemStack[] items) throws IllegalStateException {
+        if (items == null) return "null";
+
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
@@ -140,6 +142,8 @@ public class Serializer {
      * @throws IOException
      */
     public static ItemStack[] itemStackArrayFromBase64(String data) throws IOException {
+        if (data.equalsIgnoreCase("null") || data == null) return null;
+
         try {
             ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
             BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);

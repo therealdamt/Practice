@@ -4,12 +4,13 @@ import lombok.Getter;
 import org.bson.Document;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.PluginManager;
 import xyz.damt.Practice;
+import xyz.damt.kit.listener.SoupKitListener;
+import xyz.damt.kit.listener.SpleefKitListener;
+import xyz.damt.kit.listener.SumoKitListener;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -21,13 +22,17 @@ public class KitHandler {
     public KitHandler(Practice practice) {
         this.practice = practice;
 
+        practice.getServer().getPluginManager().registerEvents(new SumoKitListener(), practice);
+        practice.getServer().getPluginManager().registerEvents(new SpleefKitListener(), practice);
+        practice.getServer().getPluginManager().registerEvents(new SoupKitListener(), practice);
+
         this.load();
     }
 
     public void load() {
         practice.getServer().getScheduler().runTaskAsynchronously(practice, () -> {
             practice.getMongoHandler().getKits().find().forEach((Consumer<? super Document>) document ->
-                new Kit(document.getString("_id")));
+                new Kit(document.getString("_id"), document.getBoolean("elo")));
         });
     }
 
