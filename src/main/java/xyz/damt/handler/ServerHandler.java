@@ -36,9 +36,9 @@ public class ServerHandler {
 
         player.getInventory().setItem(0, new ItemBuilder(Material.IRON_SWORD).name(CC.translate("&c&lUnranked Queue")).build());
         player.getInventory().setItem(1, new ItemBuilder(Material.DIAMOND_SWORD).name(CC.translate("&b&lRanked Queue")).build());
-        player.getInventory().setItem(4, new ItemBuilder(Material.PAPER).name(CC.translate("&e&lStatistics")).build());
+        player.getInventory().setItem(8, new ItemBuilder(Material.PAPER).name(CC.translate("&e&lStatistics")).build());
         player.getInventory().setItem(7, new ItemBuilder(Material.COMPASS).name(CC.translate("&2&lDuel Requests")).build());
-        player.getInventory().setItem(8, new ItemBuilder(Material.EMERALD).name(CC.translate("&6&lCoin Shop")).build());
+        player.getInventory().setItem(4, new ItemBuilder(Material.EMERALD).name(CC.translate("&6&lCreate a party")).build());
     }
 
     public void giveQueueItems(Player player) {

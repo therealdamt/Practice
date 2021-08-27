@@ -44,7 +44,7 @@ public class Kit {
 
         this.load();
 
-        if (elo && !name.contains("Elo")) name = name + "Elo";
+        if (elo && !name.contains("Elo ")) name = name + "Elo";
         this.name = name;
 
         Practice.getInstance().getKitHandler().getKitHashMap().put(name.toLowerCase(), this);

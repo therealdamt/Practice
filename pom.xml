@@ -106,7 +106,7 @@
         <dependency>
             <groupId>com.github.vaperion</groupId>
             <artifactId>blade</artifactId>
-            <version>1.1.0</version>
+            <version>1.2.7</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

@@ -44,8 +44,8 @@ public abstract class Menu {
             inventory.setItem(integer, getMap(player).get(integer));
         });
 
-        if (player.getOpenInventory().equals(inventory)) {
-            player.updateInventory();
+        if (player.getOpenInventory().getTopInventory().equals(inventory)) {
+            player.getOpenInventory().getTopInventory().setContents(inventory.getContents());
             return;
         }
 

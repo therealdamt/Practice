@@ -5,7 +5,6 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,11 +12,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.inventory.ItemStack;
 import xyz.damt.Practice;
 import xyz.damt.events.MatchEndEvent;
 import xyz.damt.kit.KitType;
@@ -28,13 +23,13 @@ import xyz.damt.util.CC;
 import xyz.damt.util.PacketUtils;
 import xyz.damt.util.TextBuilder;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class MatchListener implements Listener {
 
     private final Practice practice = Practice.getInstance();
 
+    /*
     @EventHandler
     public void onPlayerMoveEvent(PlayerMoveEvent e) {
         Player player = e.getPlayer();
@@ -46,6 +41,7 @@ public class MatchListener implements Listener {
 
         if (!match.isHasStarted()) e.setCancelled(true);
     }
+     */
 
     @EventHandler
     public void onEntityDamageEvent(EntityDamageEvent e) {

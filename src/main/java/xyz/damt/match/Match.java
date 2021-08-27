@@ -10,13 +10,15 @@ import xyz.damt.arena.Arena;
 import xyz.damt.events.MatchEndEvent;
 import xyz.damt.events.MatchStartEvent;
 import xyz.damt.kit.Kit;
-import xyz.damt.profile.Profile;
+import xyz.damt.kit.KitType;
+import xyz.damt.util.PacketUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Getter @Setter
+@Getter
+@Setter
 public class Match {
 
     private final Player playerOne;
@@ -49,6 +51,9 @@ public class Match {
         MatchStartEvent matchStartEvent = new MatchStartEvent(this, playerOne, playerTwo);
         Bukkit.getPluginManager().callEvent(matchStartEvent);
 
+        PacketUtils.denyMovement(playerTwo);
+        PacketUtils.denyMovement(playerOne);
+
         playerOne.teleport(arena.getPositionOne());
         playerTwo.teleport(arena.getPositionTwo());
 
@@ -65,7 +70,21 @@ public class Match {
         playerTwo.setFoodLevel(20);
 
         spectators.forEach(spectator -> spectator.teleport(arena.getCenter()));
-        arena.setBusy(true);
+
+        if (kit.getKitType().equals(KitType.BUILD)) {
+            arena.setBusy(true);
+        }
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            playerOne.hidePlayer(player);
+            playerTwo.hidePlayer(player);
+
+            player.hidePlayer(playerOne);
+            player.hidePlayer(playerTwo);
+        }
+
+        playerOne.showPlayer(playerTwo);
+        playerTwo.showPlayer(playerOne);
 
         Practice.getInstance().getMatchHandler().getMatchHashMap().put(playerOne.getUniqueId(), this);
         Practice.getInstance().getMatchHandler().getMatchHashMap().put(playerTwo.getUniqueId(), this);
@@ -80,9 +99,6 @@ public class Match {
         playerOne.setGameMode(GameMode.CREATIVE);
         playerTwo.setGameMode(GameMode.CREATIVE);
 
-        playerOne.spigot().respawn();
-        playerTwo.spigot().respawn();
-
         MatchEndEvent matchEndEvent = playerOne.getUniqueId().equals(uuid) ?
                 new MatchEndEvent(this, playerOne, playerTwo) : new MatchEndEvent(this, playerTwo, playerOne);
         Bukkit.getPluginManager().callEvent(matchEndEvent);
@@ -90,11 +106,18 @@ public class Match {
         Bukkit.getScheduler().runTaskLater(Practice.getInstance(), () -> {
             playersToList().forEach(player -> {
                 if (player != null) {
+
+                    if (isSpectator(player)) {
+                        this.removeSpectator(player);
+                        return;
+                    }
+
                     player.teleport(Practice.getInstance().getServerHandler().getSpawnLocation());
                     Practice.getInstance().getServerHandler().giveSpawnItems(player);
                     player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
                 }
             });
+
 
             spectators.clear();
             arena.rollback();
@@ -105,6 +128,34 @@ public class Match {
     public void setHasStarted(boolean value) {
         this.hasStarted = value;
         this.matchState = MatchState.STARTED;
+    }
+
+    public void addSpectator(Player player) {
+        spectators.add(player);
+
+        player.teleport(arena.getCenter());
+
+        player.showPlayer(playerOne);
+        player.showPlayer(playerTwo);
+
+        Practice.getInstance().getMatchHandler().getMatchHashMap().put(player.getUniqueId(), this);
+    }
+
+    public void removeSpectator(Player player) {
+        spectators.remove(player);
+
+        player.hidePlayer(playerOne);
+        player.hidePlayer(playerTwo);
+
+        player.teleport(Practice.getInstance().getServerHandler().getSpawnLocation());
+        player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
+        Practice.getInstance().getServerHandler().giveSpawnItems(player);
+
+        Practice.getInstance().getMatchHandler().getMatchHashMap().remove(player.getUniqueId());
+    }
+
+    public boolean isSpectator(Player player) {
+        return spectators.contains(player);
     }
 
     public Player getOpponent(Player player) {

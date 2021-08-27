@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Getter @Setter
+@Getter
+@Setter
 public class Party {
 
     private final UUID leader;
@@ -46,6 +47,16 @@ public class Party {
         });
 
         members.clear();
+    }
+
+    public void addMember(UUID uuid) {
+        members.add(uuid);
+        Practice.getInstance().getPartyHandler().getMap().put(uuid, this);
+    }
+
+    public void kickMember(UUID uuid) {
+        members.remove(uuid);
+        Practice.getInstance().getPartyHandler().getMap().remove(uuid);
     }
 
     @Override

@@ -1,11 +1,11 @@
 package xyz.damt.commands;
 
-import javafx.scene.paint.Color;
 import me.vaperion.blade.command.annotation.Command;
 import me.vaperion.blade.command.annotation.Name;
 import me.vaperion.blade.command.annotation.Sender;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import xyz.damt.Practice;
 import xyz.damt.party.Party;
@@ -137,6 +137,58 @@ public class PartyCommand {
         target.sendMessage("&7You have been invited to &b" + player.getName() + "'s party&7!");
         target.spigot().sendMessage(new TextBuilder().setText("Click here to accept!").setColor(ChatColor.AQUA)
                 .setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party accept " + player.getName())).build());
+    }
+
+    @Command(value = "party kick", async = true, quoted = false, description = "Party Invite Command")
+    public void partyKickCommand(@Sender Player player, @Name("player") Player target) {
+        Party party = Practice.getInstance().getPartyHandler().getParty(player.getUniqueId());
+
+        if (party == null) {
+            player.sendMessage(CC.translate("&cYou must be in a party to do this command!"));
+            return;
+        }
+
+        if (!party.isLeader(player.getUniqueId())) {
+            player.sendMessage(CC.translate("&cYou must be the leader of the party to do this command!"));
+            return;
+        }
+
+        Party targetParty = Practice.getInstance().getPartyHandler().getParty(target.getUniqueId());
+
+        if (targetParty == null || !targetParty.isLeader(player.getUniqueId())) {
+            player.sendMessage(CC.translate("&cThe user that you invited isn't inside of your party!"));
+            return;
+        }
+
+        party.kickMember(target.getUniqueId());
+
+        target.sendMessage(CC.translate("&cYou have been kicked from " + player.getName() + "'s party!"));
+        party.getMembers().stream().map(Bukkit::getPlayer).forEach(player1 -> {
+            if (player1 == null)
+                return;
+
+            player1.sendMessage(CC.translate("&cThe user " + target.getName() + " has been kicked from the party!"));
+        });
+    }
+
+    @Command(value = "party accept", description = "Party Accept Command", quoted = false, async = true)
+    public void partyAcceptCommand(@Sender Player player, @Name("party") Party party) {
+        Profile profile = Practice.getInstance().getProfileHandler().getProfile(player.getUniqueId());
+
+        if (!profile.getPartyInvites().contains(party)) {
+            player.sendMessage(CC.translate("&cThe party you specified did not invite you!"));
+            return;
+        }
+
+        party.addMember(player.getUniqueId());
+
+        player.sendMessage(CC.translate("&aJoined party!"));
+        party.getMembers().stream().map(Bukkit::getPlayer).forEach(player1 -> {
+            if (player1 == null)
+                return;
+
+            player1.sendMessage(CC.translate("&aThe user " + player.getName() + " has joined the party!"));
+        });
     }
 
 }

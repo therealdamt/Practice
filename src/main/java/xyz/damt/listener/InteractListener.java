@@ -10,7 +10,6 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import xyz.damt.Practice;
-import xyz.damt.match.Match;
 import xyz.damt.menu.menus.DuelRequestsMenu;
 import xyz.damt.menu.menus.StatisticsMenu;
 import xyz.damt.util.CC;
@@ -35,7 +34,7 @@ public class InteractListener implements Listener {
                     player.chat("/ranked");
                     break;
                 case EMERALD:
-                    player.chat(Practice.getInstance().getConfigHandler().getSettingsHandler().COIN_SHOP_COMMAND);
+                    player.chat("/party create");
                     break;
                 case COMPASS:
                     new DuelRequestsMenu(player).updateMenu();

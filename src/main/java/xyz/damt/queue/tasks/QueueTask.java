@@ -1,6 +1,7 @@
 package xyz.damt.queue.tasks;
 
 import org.bukkit.scheduler.BukkitRunnable;
+import xyz.damt.queue.Queue;
 import xyz.damt.queue.QueueHandler;
 
 public class QueueTask extends BukkitRunnable {
@@ -13,6 +14,6 @@ public class QueueTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        queueHandler.getQueues().forEach(queue -> queue.move());
+        queueHandler.getQueues().forEach(Queue::move);
     }
 }

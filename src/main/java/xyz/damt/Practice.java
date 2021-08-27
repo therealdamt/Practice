@@ -1,11 +1,14 @@
 package xyz.damt;
 
 import lombok.Getter;
+import lombok.SneakyThrows;
 import me.vaperion.blade.Blade;
 import me.vaperion.blade.command.bindings.impl.BukkitBindings;
 import me.vaperion.blade.command.bindings.impl.DefaultBindings;
 import me.vaperion.blade.command.container.impl.BukkitCommandContainer;
+import me.vaperion.blade.completer.impl.DefaultTabCompleter;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.damt.api.PracticeAPI;
 import xyz.damt.arena.Arena;
@@ -39,10 +42,13 @@ import xyz.damt.tasks.MongoSaveTask;
 import xyz.damt.util.assemble.Assemble;
 import xyz.damt.util.assemble.AssembleStyle;
 
+import java.io.IOException;
+
 @Getter
 public class Practice extends JavaPlugin {
 
-    @Getter private static Practice instance;
+    @Getter
+    private static Practice instance;
 
     private ConfigHandler configHandler;
     private MongoHandler mongoHandler;
@@ -63,6 +69,7 @@ public class Practice extends JavaPlugin {
         this.saveDefaultConfig();
     }
 
+    @SneakyThrows
     @Override
     public void onEnable() {
         this.configHandler = new ConfigHandler(this);
@@ -84,7 +91,7 @@ public class Practice extends JavaPlugin {
         new MongoSaveTask(this).runTaskTimerAsynchronously(this, 500 * 20L, 500 * 20L);
     }
 
-    private void registerPlugin() {
+    private void registerPlugin() throws IOException {
         this.getServer().getPluginManager().registerEvents(new ProfileListener(), this);
         this.getServer().getPluginManager().registerEvents(new ArenaListener(), this);
         this.getServer().getPluginManager().registerEvents(new QueueListener(), this);
@@ -100,10 +107,9 @@ public class Practice extends JavaPlugin {
                 .bind(Queue.class, new QueueCommandProvider(this))
                 .bind(Material.class, new MaterialCommandProvider())
                 .bind(Party.class, new PartyCommandProvider())
-                .fallbackPrefix("practice").tabCompleter(bladeCommandService -> {
-        }).build().register(new ViewCommand()).register(new RankedCommand()).register(new UnrankedCommand())
-        .register(new LeaveQueueCommand()).register(new KitCommand()).register(new ArenaCommand()).register(new EssentialCommands()).register(new DuelCommand())
-        .register(new PartyCommand());
+                .fallbackPrefix("practice").tabCompleter(new DefaultTabCompleter()).build().register(new ViewCommand()).register(new RankedCommand()).register(new UnrankedCommand())
+                .register(new LeaveQueueCommand()).register(new KitCommand()).register(new ArenaCommand()).register(new EssentialCommands()).register(new DuelCommand())
+                .register(new PartyCommand()).register(new SpectateCommand());
 
         if (configHandler.getSettingsHandler().USE_PLACEHOLDER) {
             new PracticePlaceHolderHook(this).register();
@@ -121,6 +127,9 @@ public class Practice extends JavaPlugin {
 
     }
 
+    public double getReach(Player playerOne, Player playerTwo) {
+        return playerOne.getLocation().distance(playerTwo.getLocation());
+    }
 
 
 }

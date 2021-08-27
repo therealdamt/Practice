@@ -61,7 +61,8 @@ public class Queue {
                     return;
                 }
 
-                new Match(one, two, kit, arena, true);
+                Player finalTwo = two;
+                Bukkit.getScheduler().runTask(Practice.getInstance(), () -> new Match(one, finalTwo, kit, arena, true));
             } else {
                 if (i > playersInQueue.size()) return;
 
@@ -83,7 +84,8 @@ public class Queue {
             return;
         }
 
-        new Match(one, two, kit, arena, false);
+        Player finalTwo1 = two;
+        Bukkit.getScheduler().runTask(Practice.getInstance(), () -> new Match(one, finalTwo1, kit, arena, true));
     }
 
     public void add(Player player) {
