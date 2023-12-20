@@ -12,7 +12,7 @@ Mongo Practice Core, it's almost completed, the features below are the remaining
 
 ### Intorduction
 
-Hello everyone, my name is damt and today I present to you a fully custom practice core that has one depenency which is Mongo Database
+Hello everyone, my name is waseem and today I present to you a fully custom practice core that has one depenency which is Mongo Database
 
 ### Infromation
 
@@ -88,6 +88,4 @@ scoreboard:
 ### Contact
 If you'd like to contact me, you can use any of the 3 platforms below:
 
-* Discord - damt#0866
-* [Telegram](https://t.me/therealdamt)
-* [Webiste](https://damt.xyz)
+* Discord - bingbongwaseem
